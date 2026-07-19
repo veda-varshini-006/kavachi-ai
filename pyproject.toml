@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kavach-ai"
+version = "0.1.0"
+description = "Multi-source digital public-safety intelligence for detecting scam coercion, screening suspect currency, linking fraud networks, and coordinating geospatial response."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+where = ["packages", "apps"]
+include = ["kavach_*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["packages", "apps"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM"]
+ignore = ["E501", "B008", "N805", "UP042"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+ignore_missing_imports = true
+warn_return_any = false
+warn_unused_configs = true
+exclude = ["migrations", "alembic"]
+
+[tool.pytest.ini_options]
+testpaths = ["apps/api/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.run]
+source = ["packages", "apps/api/kavach_api"]
+omit = ["*/tests/*", "*/migrations/*"]

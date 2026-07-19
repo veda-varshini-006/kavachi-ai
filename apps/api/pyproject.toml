@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kavach-api"
+version = "0.1.0"
+description = "FastAPI backend service for Kavach AI"
+requires-python = ">=3.11"
+dependencies = [
+    "kavach-domain",
+    "kavach-config",
+    "kavach-synthetic-data",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "sqlalchemy>=2.0.30",
+    "alembic>=1.13.0",
+    "orjson>=3.10.0",
+    "structlog>=24.1.0",
+    "python-multipart>=0.0.9",
+    "slowapi>=0.1.9",
+    "prometheus-fastapi-instrumentator>=7.0.0",
+    "opentelemetry-api>=1.25.0",
+    "opentelemetry-sdk>=1.25.0",
+    "opentelemetry-instrumentation-fastapi>=0.46b0",
+    "opentelemetry-instrumentation-sqlalchemy>=0.46b0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kavach_api*"]

@@ -1,0 +1,97 @@
+version: "3.9"
+
+# ─── Kavach AI Docker Compose ───────────────────────────────────────────
+# Usage:
+#   docker compose up --build
+#
+# Services:
+#   db   — PostgreSQL database       → port 5432
+#   api  — FastAPI backend           → http://localhost:8000
+#   web  — Next.js dashboard         → http://localhost:3000
+# ─────────────────────────────────────────────────────────────────────────
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: kavach-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: kavach_ai
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - kavach_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d kavach_ai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: kavach-api
+    ports:
+      - "8000:8000"
+    environment:
+      - KAVACH_DEBUG=True
+      - KAVACH_DATABASE_URL=postgresql://postgres:postgrespassword@db:5432/kavach_ai
+      - KAVACH_CORS_ORIGINS=http://localhost:3000
+      - KAVACH_LOG_LEVEL=INFO
+    volumes:
+      - kavach_data:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  web:
+    build:
+      context: apps/web
+      dockerfile: ../../docker/web.Dockerfile
+    container_name: kavach-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: kavach-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./grafana/provisioning/datasources/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: kavach-grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  kavach_db_data:
+    name: kavach_db_data
+  kavach_data:
+    name: kavach_data

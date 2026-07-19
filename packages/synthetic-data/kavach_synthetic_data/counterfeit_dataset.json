@@ -1,0 +1,127 @@
+{
+  "provenance": "Kavach AI Synthetic Perturbation Set",
+  "license": "CC0-1.0 Universal",
+  "disclaimer": "All files cataloged are watermarked, heavily altered, or low-resolution synthetic prototypes solely used for tool detection benchmarks. Not print-ready or admissible.",
+  "items": [
+    {
+      "id": "syn-001",
+      "label": "LIKELY_GENUINE",
+      "denomination": "500_INR",
+      "perturbations": ["none"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.02,
+        "color_balance": "neutral"
+      }
+    },
+    {
+      "id": "syn-002",
+      "label": "SUSPECT_COUNTERFEIT",
+      "denomination": "500_INR",
+      "perturbations": ["color_shift"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.02,
+        "color_balance": "heavy_green_cast"
+      }
+    },
+    {
+      "id": "syn-003",
+      "label": "NEEDS_MANUAL_REVIEW",
+      "denomination": "200_INR",
+      "perturbations": ["blur"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.85,
+        "color_balance": "neutral"
+      }
+    },
+    {
+      "id": "syn-004",
+      "label": "SUSPECT_COUNTERFEIT",
+      "denomination": "500_INR",
+      "perturbations": ["duplicate_serial"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.01,
+        "color_balance": "neutral"
+      }
+    },
+    {
+      "id": "syn-005",
+      "label": "NEEDS_MANUAL_REVIEW",
+      "denomination": "500_INR",
+      "perturbations": ["crop"],
+      "image_attributes": {
+        "width": 400,
+        "height": 380,
+        "blur_level": 0.05,
+        "color_balance": "neutral"
+      }
+    },
+    {
+      "id": "syn-006",
+      "label": "LIKELY_GENUINE",
+      "denomination": "100_INR",
+      "perturbations": ["none"],
+      "image_attributes": {
+        "width": 1100,
+        "height": 520,
+        "blur_level": 0.01,
+        "color_balance": "neutral"
+      }
+    },
+    {
+      "id": "syn-007",
+      "label": "SUSPECT_COUNTERFEIT",
+      "denomination": "2000_INR",
+      "perturbations": ["color_shift", "perspective"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.04,
+        "color_balance": "magenta_drift"
+      }
+    },
+    {
+      "id": "syn-008",
+      "label": "SUSPECT_COUNTERFEIT",
+      "denomination": "500_INR",
+      "perturbations": ["region_removal"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.02,
+        "color_balance": "neutral"
+      }
+    },
+    {
+      "id": "syn-009",
+      "label": "NEEDS_MANUAL_REVIEW",
+      "denomination": "500_INR",
+      "perturbations": ["glare"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.03,
+        "color_balance": "overexposed"
+      }
+    },
+    {
+      "id": "syn-010",
+      "label": "LIKELY_GENUINE",
+      "denomination": "500_INR",
+      "perturbations": ["none"],
+      "image_attributes": {
+        "width": 1200,
+        "height": 570,
+        "blur_level": 0.02,
+        "color_balance": "neutral"
+      }
+    }
+  ]
+}

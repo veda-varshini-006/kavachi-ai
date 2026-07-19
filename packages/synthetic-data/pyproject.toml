@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kavach-synthetic-data"
+version = "0.1.0"
+description = "Deterministic synthetic data generators and seeds for Kavach AI"
+requires-python = ">=3.11"
+dependencies = [
+    "kavach-domain",
+    "kavach-config",
+    "sqlalchemy>=2.0.30",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kavach_synthetic_data*"]

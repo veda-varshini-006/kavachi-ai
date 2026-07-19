@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kavach-domain"
+version = "0.1.0"
+description = "Core domain models and validation schemas for Kavach AI"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7.0",
+    "sqlalchemy>=2.0.30",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kavach_domain*"]

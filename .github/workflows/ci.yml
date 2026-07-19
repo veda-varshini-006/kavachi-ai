@@ -1,0 +1,79 @@
+name: Kavach AI CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+          pip install -e packages/domain -e packages/config -e packages/synthetic-data -e apps/api
+
+      - name: Run Ruff Linter
+        run: ruff check packages/ apps/api/kavach_api/
+
+      - name: Run MyPy Typecheck
+        run: mypy packages/domain/kavach_domain/ packages/config/kavach_config/ --ignore-missing-imports
+
+      - name: Run Backend Tests
+        run: pytest apps/api/tests/ -v
+
+  frontend-lint-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd apps/web
+          npm install --legacy-peer-deps
+
+      - name: Run ESLint
+        run: |
+          cd apps/web
+          npm run lint
+
+      - name: Run TypeScript compiler
+        run: |
+          cd apps/web
+          npm run type-check
+
+      - name: Build Next.js App
+        run: |
+          cd apps/web
+          npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8000
+
+  sbom-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@v0
+        with:
+          format: spdx-json
+          output-file: kavach_ai_sbom.spdx.json

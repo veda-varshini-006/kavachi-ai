@@ -1,0 +1,255 @@
+[
+  {
+    "id": "digital-arrest",
+    "title": "Digital Arrest Impersonation",
+    "description": "Scammer impersonates CBI / Cyber Cell officer claiming citizen's ID was used to send illegal packages and threatens arrest.",
+    "language": "Hindi / Hinglish / English",
+    "category": "IMPERSONATION",
+    "expected_risk_band": "CRITICAL",
+    "expected_indicators": ["TI-101", "TI-102"],
+    "safe_unsafe_notes": "Unsafe. Demands transfer of money under the threat of digital arrest.",
+    "explanation": "The caller uses legal coercion, police credentials impersonation, and immediate arrest threats to force the citizen to lock themselves in a room and transfer verification funds.",
+    "segments": [
+      {
+        "speaker": "SUSPECT",
+        "text": "Hello, main CBI HQ Delhi se Inspector Mishra baat kar raha hoon. Aapke naam par ek suspicious parcel Mumbai airport par intercept kiya gaya hai.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "What? parcel? Maine toh koi parcel nahi bheja! Kisne bheja hai?",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Is parcel mein 5 fake passport, drug packets aur aapka Aadhar card mila hai. Aap illegal money laundering case mein prime suspect hain.",
+        "delay_sec": 4,
+        "is_escalation": true
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "Ye bilkul galat hai! Mera ID missuse hua hoga. Main police station aa jata hoon.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Nahi, aapko abhi digital arrest kiya jata hai. Skype ya video call par aaiye, camera off mat karna. Kisi ko bataya toh 5 saal ki jail hogi.",
+        "delay_sec": 5,
+        "is_escalation": true
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Apne bank account verification ke liye ₹1,50,000 abhi safe clearance UPI address secure-clearance@ybl par transfer kijiye. Verification ke baad return ho jayega.",
+        "delay_sec": 5,
+        "is_escalation": true
+      }
+    ]
+  },
+  {
+    "id": "courier-impersonation",
+    "title": "Courier / Customs Impersonation",
+    "description": "VoIP caller claiming to be Customs Department or FedEx representative demanding clearance fee for intercept package.",
+    "language": "English",
+    "category": "IMPERSONATION",
+    "expected_risk_band": "CRITICAL",
+    "expected_indicators": ["TI-101", "TI-102"],
+    "safe_unsafe_notes": "Unsafe. The caller demands immediate clearance fee via private UPI wallet.",
+    "explanation": "Impersonates FedEx agent first, then custom officer, and uses fear of legal prosecution to force money routing.",
+    "segments": [
+      {
+        "speaker": "SUSPECT",
+        "text": "Hello, this is FedEx customer support. Your package containing illegal credit cards has been held by Customs.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "I did not order or send any international packages. There must be a mistake.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "We are transferring your call to Mumbai Customs officer. Please hold.",
+        "delay_sec": 4,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "This is Officer Rathore. You must pay a customs clearance penalty of ₹45,000 immediately or face arrest.",
+        "delay_sec": 4,
+        "is_escalation": true
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Send the clearance amount to customs-fees@paytm to verify your details. Do it in 10 minutes.",
+        "delay_sec": 5,
+        "is_escalation": true
+      }
+    ]
+  },
+  {
+    "id": "bank-impersonation",
+    "title": "Bank Account KYC Freeze",
+    "description": "Scammer calls claiming to be from bank security department, claiming the account is blocked due to missing KYC.",
+    "language": "Telugu / English",
+    "category": "KYC_FRAUD",
+    "expected_risk_band": "CRITICAL",
+    "expected_indicators": ["TI-101", "TI-102"],
+    "safe_unsafe_notes": "Unsafe. Demands card details and OTP verification.",
+    "explanation": "Threatens immediate freeze of all bank assets unless citizen gives OTP or transfers funds.",
+    "segments": [
+      {
+        "speaker": "SUSPECT",
+        "text": "Namaste, nenu bank customer care nundi matladuthunnanu. Mee KYC details update cheyakapothe mee account block avthundi.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "Oh, my account will be frozen? What do I need to do to complete it?",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Mee debit card and mobile verification code share cheyyandi. Leda safety transfer ga security-kyc@okaxis upi ki ₹30,000 pampinchandi.",
+        "delay_sec": 4,
+        "is_escalation": true
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Mee mobile screen paina vachina 6-digit OTP ventane naku cheppandi.",
+        "delay_sec": 5,
+        "is_escalation": true
+      }
+    ]
+  },
+  {
+    "id": "phishing-link",
+    "title": "Phishing Link Solicitation",
+    "description": "Scammer calls informing target of free reward points expiration, instructing them to click a short link.",
+    "language": "Tamil / English",
+    "category": "OTP_FRAUD",
+    "expected_risk_band": "SUSPICIOUS",
+    "expected_indicators": ["TI-101"],
+    "safe_unsafe_notes": "Unsafe. Instructs target to enter private details on a suspicious link.",
+    "explanation": "Uses rewards bait and fake link to capture credentials.",
+    "segments": [
+      {
+        "speaker": "SUSPECT",
+        "text": "Hello, ungaloda Credit Card reward points expiry aaga pogudhu. Inikey redeem pannalana loss aagidum.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "How many points do I have? Can you credit them to my account directly?",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "No sir, SMS la send panna link: http://bit.ly/bank-secure-redeem open panni card details verification mudiyunga.",
+        "delay_sec": 4,
+        "is_escalation": true
+      }
+    ]
+  },
+  {
+    "id": "benign-bank-support",
+    "title": "Benign Bank Support Check",
+    "description": "Citizen calls official customer care to inquire about standard credit card interest rates.",
+    "language": "English",
+    "category": "SAFE",
+    "expected_risk_band": "SAFE",
+    "expected_indicators": [],
+    "safe_unsafe_notes": "Safe. Standard informational request. No coercion or fund transfer.",
+    "explanation": "Normal credit card support conversation regarding payment due dates and grace periods.",
+    "segments": [
+      {
+        "speaker": "CITIZEN",
+        "text": "Hello, I wanted to check the grace period for my credit card payments.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Welcome to Bank support. It is generally 45 days. You can also view this in your official banking application.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "Okay, thank you. No action needed then.",
+        "delay_sec": 3,
+        "is_escalation": false
+      }
+    ]
+  },
+  {
+    "id": "benign-delivery-confirmation",
+    "title": "Benign Delivery Confirmation",
+    "description": "Delivery executive calls to verify address coordinates for a package shipment.",
+    "language": "Hindi / English",
+    "category": "SAFE",
+    "expected_risk_band": "SAFE",
+    "expected_indicators": [],
+    "safe_unsafe_notes": "Safe. Standard delivery check. No legal threats or payment requests.",
+    "explanation": "Normal logistical check. Delivery boy confirms local address landmarks.",
+    "segments": [
+      {
+        "speaker": "SUSPECT",
+        "text": "Bhaiya, main delivery boy baat kar raha hoon. Aapka address Sector 62, Block C hai na? Main tower gate par hoon.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "Haan, main ground floor flat 102 par hoon. Aap guard ko parcel de sakte hain.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Theek hai bhaiya, maine guard room mein parcel rakh diya hai.",
+        "delay_sec": 3,
+        "is_escalation": false
+      }
+    ]
+  },
+  {
+    "id": "ambiguous-high-pressure",
+    "title": "Ambiguous High Pressure",
+    "description": "Urgent request from boss/colleague regarding missing server keys and access codes.",
+    "language": "English",
+    "category": "SAFE",
+    "expected_risk_band": "SAFE",
+    "expected_indicators": [],
+    "safe_unsafe_notes": "Safe (Ambigous Negative). High stress tone but not a financial/police scam.",
+    "explanation": "A professional work emergency. No impersonation of authorities or request for public UPI funds transfer.",
+    "segments": [
+      {
+        "speaker": "SUSPECT",
+        "text": "Hey! Where are you? The server just crashed and the production database is offline. We need the API keys right now!",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "CITIZEN",
+        "text": "I am traveling. Let me check the password manager from my phone.",
+        "delay_sec": 3,
+        "is_escalation": false
+      },
+      {
+        "speaker": "SUSPECT",
+        "text": "Please hurry up! Every minute down is costing us thousands. Send the config file to our internal company slack.",
+        "delay_sec": 4,
+        "is_escalation": false
+      }
+    ]
+  }
+]
