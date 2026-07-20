@@ -3,12 +3,16 @@
 import "@/app/globals.css";
 import Sidebar from "@/components/layout/sidebar";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ShieldCheck, RefreshCw, Database } from "lucide-react";
+import { inter, playfair } from "./fonts";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [dbStatus, setDbStatus] = useState<string>("checking");
   const [resetting, setResetting] = useState<boolean>(false);
   const [resetMsg, setResetMsg] = useState<string>("");
+  const pathname = usePathname();
+  const isLandingPage = pathname === "/";
 
   const checkStatus = async () => {
     try {
@@ -30,7 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           setResetMsg("Success!");
           checkStatus();
           setTimeout(() => setResetMsg(""), 3000);
-          // Reload window after resetting to reload seeded elements
           window.location.reload();
         } else {
           setResetMsg("Error resetting");
@@ -50,47 +53,47 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="flex h-screen w-screen overflow-hidden bg-background text-gray-100 font-sans">
-        <Sidebar />
+        {/* Subtle grainy noise overlay across entire app */}
+        <div className="pointer-events-none fixed inset-0 z-[100] opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png')" }} />
         
-        {/* Main Content Area */}
+        {!isLandingPage && <Sidebar />}
+        
         <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
-          {/* Top Header Controls */}
-          <header className="flex h-16 items-center justify-between border-b border-borderBg bg-cardBg/60 px-6 shrink-0 z-10 backdrop-blur-md">
-            {/* Status bar details */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 text-xs text-gray-400">
-                <div
-                  className={`h-2.5 w-2.5 rounded-full ${
-                    dbStatus === "connected" ? "bg-emerald-500" : "bg-red-500 animate-ping"
-                  }`}
-                />
-                <span>DB: {dbStatus === "connected" ? "Connected" : "Offline"}</span>
+          {!isLandingPage && (
+            <header className="flex h-16 items-center justify-between border-b border-borderBg bg-cardBg/60 px-6 shrink-0 z-10 backdrop-blur-md">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                  <div
+                    className={`h-2.5 w-2.5 rounded-full ${
+                      dbStatus === "connected" ? "bg-emerald-500" : "bg-red-500 animate-ping"
+                    }`}
+                  />
+                  <span>DB: {dbStatus === "connected" ? "Connected" : "Offline"}</span>
+                </div>
+                <div className="rounded-full bg-accentAmber/10 border border-accentAmber/30 px-2.5 py-0.5 text-[10px] font-bold text-accentAmber tracking-wider uppercase">
+                  SYNTHETIC PROTOTYPE
+                </div>
               </div>
-              <div className="rounded-full bg-accentAmber/10 border border-accentAmber/30 px-2.5 py-0.5 text-[10px] font-bold text-accentAmber tracking-wider uppercase">
-                SYNTHETIC PROTOTYPE
+
+              <div className="flex items-center gap-3">
+                {resetMsg && (
+                  <span className="text-xs font-medium text-accentTeal animate-pulse">{resetMsg}</span>
+                )}
+                <button
+                  onClick={handleReset}
+                  disabled={resetting}
+                  className="flex items-center gap-2 rounded-md bg-slate-800 hover:bg-slate-700/80 px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-50 border border-borderBg hover:border-accentTeal"
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 ${resetting ? 'animate-spin' : ''}`} />
+                  Reset System DB
+                </button>
               </div>
-            </div>
+            </header>
+          )}
 
-            {/* Quick Actions (Seed Reset) */}
-            <div className="flex items-center gap-3">
-              {resetMsg && (
-                <span className="text-xs font-medium text-accentTeal animate-pulse">{resetMsg}</span>
-              )}
-              <button
-                onClick={handleReset}
-                disabled={resetting}
-                className="flex items-center gap-2 rounded-md bg-slate-800 hover:bg-slate-700/80 px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-50 border border-borderBg hover:border-accentTeal"
-              >
-                <RefreshCw className={`h-3.5 w-3.5 ${resetting ? 'animate-spin' : ''}`} />
-                Reset System DB
-              </button>
-            </div>
-          </header>
-
-          {/* Child Routes Main Frame */}
-          <main className="flex-1 overflow-auto p-8 relative">
+          <main className={`flex-1 overflow-auto relative ${isLandingPage ? 'p-0' : 'p-8'}`}>
             {children}
           </main>
         </div>

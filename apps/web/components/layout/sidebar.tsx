@@ -19,7 +19,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const navigation = [
-    { name: "Overview", href: "/", icon: LayoutDashboard },
+    { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "Call Simulator", href: "/call-simulator", icon: PhoneCall },
     { name: "SOC Dashboard", href: "/soc", icon: ShieldAlert },
     { name: "Cases", href: "/cases", icon: Briefcase },
@@ -33,10 +33,10 @@ export default function Sidebar() {
     <div className="flex h-full w-64 flex-col border-r border-borderBg bg-cardBg text-gray-200">
       {/* Brand Header */}
       <div className="flex h-16 items-center gap-2 border-b border-borderBg px-6">
-        <ShieldCheck className="h-8 w-8 text-accentTeal animate-pulse" />
+        <ShieldCheck className="h-8 w-8 text-accentGold animate-pulse" />
         <div>
           <h1 className="text-lg font-bold tracking-tight text-white leading-none">KAVACH AI</h1>
-          <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-500">
+          <span className="text-[10px] uppercase font-semibold tracking-wider text-gray-400">
             Public Safety Intel
           </span>
         </div>
@@ -54,14 +54,14 @@ export default function Sidebar() {
               className={clsx(
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-accentTeal/10 text-accentTeal border-l-4 border-accentTeal"
-                  : "text-gray-400 hover:bg-slate-800/40 hover:text-white"
+                  ? "bg-accentGold/10 text-accentGold border-l-4 border-accentGold"
+                  : "text-gray-200 hover:bg-accentGold/5 hover:text-white"
               )}
             >
               <Icon
                 className={clsx(
                   "h-5 w-5 shrink-0 transition-colors duration-200",
-                  isActive ? "text-accentTeal" : "text-gray-500 group-hover:text-gray-300"
+                  isActive ? "text-accentGold" : "text-gray-400 group-hover:text-accentGold"
                 )}
               />
               {item.name}

@@ -69,3 +69,9 @@ This document tracks technical design choices made during the development of the
 ## ADR-014: Mandatory Spatial Privacy Transformations
 - **Decision**: All API geolocations (hotspots, discrete events) must be transformed by `GeospatialService` via coordinate jittering (random noise) or grid-cell coarsening.
 - **Consequence**: Enforces citizen privacy by never serving precise private residential coordinates to the frontend, even if analysts bypass UI masking controls. Prevents individual re-identification.
+
+## DEC-009: Synthetic Data Evaluation Protocol
+**Date:** 2026-07-20
+**Context:** Need rigorous evaluation without real PII data for the final release.
+**Decision:** All evaluations (scam engine, counterfeit scanner) are strictly run against synthetic datasets generated programmatically. Results are stored in `data/evaluations/` for reproducibility.
+**Consequences:** Ensures zero data privacy risk while providing a mathematically sound validation loop for logic changes.

@@ -186,207 +186,218 @@ export default function CaseDetails({ params }: CaseDetailsProps) {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Back button and title */}
-      <div className="space-y-4">
-        <Link href="/cases" className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition">
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Back to Incident Cases
-        </Link>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">{caseObj.title}</h1>
-            <p className="text-xs font-mono text-gray-500 mt-1">Case ID: {caseObj.id}</p>
-          </div>
-          <div className="flex gap-2">
-            {caseObj.analyst_verdict && (
-              <span className={`rounded border px-3 py-1 text-xs font-bold uppercase ${
-                caseObj.analyst_verdict === "FALSE_POSITIVE"
-                  ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30"
-                  : caseObj.analyst_verdict === "CONFIRMED_SUSPICIOUS"
-                  ? "bg-accentRed/10 text-accentRed border-accentRed/30"
-                  : "bg-accentAmber/10 text-accentAmber border-accentAmber/30"
-              }`}>
-                Audit: {caseObj.analyst_verdict.replace("_", " ")}
-              </span>
-            )}
-            <span className="rounded bg-slate-800 border border-borderBg px-3 py-1 text-xs text-gray-300 font-bold uppercase">
-              Status: {caseObj.status}
-            </span>
-          </div>
-        </div>
+    <div className="relative min-h-screen pb-12">
+      {/* Background Image for Case Details with Izanami Blend */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="/city-bg.jpg"
+          alt="Abstract City Grid"
+          className="w-full h-full object-cover opacity-10 mix-blend-luminosity blur-sm"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/95 to-background" />
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        {/* Left Column: Details & Feedback (5 cols) */}
-        <div className="lg:col-span-5 space-y-6">
-          {/* Metadata Card */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">Case Metadata</h2>
-            
-            <div className="grid grid-cols-2 gap-4 text-xs">
-              <div>
-                <span className="text-gray-500 block">Severity</span>
-                <span className="font-semibold text-white uppercase">{caseObj.severity}</span>
-              </div>
-              <div>
-                <span className="text-gray-500 block">Assigned To</span>
-                <span className="font-semibold text-white">{caseObj.assigned_to || "Unassigned"}</span>
-              </div>
-              {session && (
-                <>
-                  <div>
-                    <span className="text-gray-500 block">Citizen Target</span>
-                    <span className="font-semibold text-white">{session.citizen_identifier}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-500 block">Suspect Phone</span>
-                    <span className="font-semibold text-white">{session.suspect_identifier}</span>
-                  </div>
-                </>
-              )}
+      <div className="space-y-12 max-w-[1200px] mx-auto pt-4 relative z-10">
+        {/* Back button and title */}
+        <div className="space-y-8 border-b border-white/5 pb-8">
+          <Link href="/cases" className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-accentGold transition-colors">
+            <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
+            Back to Incident Cases
+          </Link>
+
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h1 className="font-serif text-4xl text-white font-medium mb-2">{caseObj.title}</h1>
+              <p className="text-[10px] font-mono text-gray-500 tracking-widest uppercase">CASE ID: {caseObj.id}</p>
             </div>
-            <div className="border-t border-borderBg/50 pt-4">
-              <span className="text-[10px] text-gray-500 uppercase block font-bold mb-1">Incident Profile Summary</span>
-              <p className="text-xs text-gray-300 leading-relaxed">{caseObj.description}</p>
-            </div>
-          </div>
-
-          {/* Analyst Review Feedback Form */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <UserCheck className="h-4.5 w-4.5 text-accentTeal" />
-              Post-Audit Verdict Review
-            </h2>
-            <p className="text-[11px] text-gray-400">
-              Audit the auto-verdict for reporting accuracy (does not retrain downstream rules).
-            </p>
-
-            <form onSubmit={handleSubmitFeedback} className="space-y-4 text-xs">
-              <div>
-                <label className="text-[10px] font-bold uppercase text-gray-500 block mb-1.5">Resolution Verdict</label>
-                <select
-                  value={analystVerdict}
-                  onChange={(e) => setAnalystVerdict(e.target.value)}
-                  className="w-full rounded bg-slate-800 border border-borderBg px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-accentTeal"
-                >
-                  <option value="UNRESOLVED">Unresolved / In Investigation</option>
-                  <option value="CONFIRMED_SUSPICIOUS">Confirmed Coercive Scam</option>
-                  <option value="FALSE_POSITIVE">False Positive (Benign support)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-bold uppercase text-gray-500 block mb-1.5">Audit Trail Notes</label>
-                <textarea
-                  placeholder="Provide detailed justification for the verification audit..."
-                  value={feedbackNotes}
-                  onChange={(e) => setFeedbackNotes(e.target.value)}
-                  rows={3}
-                  className="w-full rounded bg-slate-800 border border-borderBg px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-accentTeal"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submittingFeedback}
-                className="w-full bg-accentTeal hover:bg-cyan-500 text-black py-2 rounded text-xs font-bold transition disabled:opacity-50"
-              >
-                {submittingFeedback ? "Saving Verdict..." : "Save Audit Verdict"}
-              </button>
-            </form>
-          </div>
-
-          {/* Evidence packages log */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">Evidence Packages Log</h2>
-
-            {/* Log form */}
-            <form onSubmit={handleAddEvidence} className="space-y-3">
-              <input
-                type="text"
-                placeholder="Evidence Title (e.g. Noida Tower Log)"
-                value={evName}
-                onChange={(e) => setEvName(e.target.value)}
-                className="w-full rounded bg-slate-800/80 border border-borderBg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-accentTeal"
-              />
-              <textarea
-                placeholder="Description / SHA hash checksum notes"
-                value={evDesc}
-                onChange={(e) => setEvDesc(e.target.value)}
-                rows={2}
-                className="w-full rounded bg-slate-800/80 border border-borderBg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-accentTeal"
-              />
-              <button
-                type="submit"
-                disabled={uploadingEv}
-                className="w-full bg-slate-800 hover:bg-slate-700/80 border border-borderBg hover:border-accentTeal py-1.5 rounded text-xs font-semibold transition text-white disabled:opacity-50"
-              >
-                {uploadingEv ? "Logging Evidence..." : "Add Synthetic Evidence Log"}
-              </button>
-            </form>
-
-            <div className="border-t border-borderBg/50 pt-4 space-y-3">
-              {evidenceList.length === 0 ? (
-                <p className="text-xs text-gray-500">No evidence logs posted yet.</p>
-              ) : (
-                evidenceList.map((ev, idx) => (
-                  <div key={idx} className="rounded-lg bg-background/40 border border-borderBg p-3 space-y-1 text-xs">
-                    <div className="flex items-center justify-between text-gray-200 font-semibold">
-                      <span className="flex items-center gap-1.5">
-                        <FileCode className="h-3.5 w-3.5 text-accentTeal" />
-                        {ev.name}
-                      </span>
-                      <span className="text-[10px] text-gray-500">
-                        {formatDistanceToNow(new Date(ev.created_at))} ago
-                      </span>
-                    </div>
-                    <p className="text-gray-400 text-[11px]">{ev.description}</p>
-                    <p className="text-[9px] text-gray-600 font-mono select-all">SHA-256: {ev.file_hash.substring(0, 24)}...</p>
-                  </div>
-                ))
+            <div className="flex gap-4">
+              {caseObj.analyst_verdict && (
+                <span className={`px-4 py-2 text-[10px] font-medium tracking-widest uppercase border ${
+                  caseObj.analyst_verdict === "FALSE_POSITIVE"
+                    ? "text-emerald-500 border-emerald-500/30"
+                    : caseObj.analyst_verdict === "CONFIRMED_SUSPICIOUS"
+                    ? "text-red-500 border-red-500/30"
+                    : "text-accentGold border-accentGold/30"
+                }`}>
+                  Audit: {caseObj.analyst_verdict.replace("_", " ")}
+                </span>
               )}
+              <span className="px-4 py-2 border border-white/10 bg-background/50 text-[10px] text-gray-300 font-medium uppercase tracking-widest">
+                Status: {caseObj.status}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Case Logs & Analyst Notes (7 cols) */}
-        <div className="lg:col-span-7 space-y-6 flex flex-col">
-          {/* Notes Log */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 flex flex-col min-h-0 space-y-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">Analyst Action Log</h2>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* Left Column: Details & Feedback (5 cols) */}
+          <div className="lg:col-span-5 space-y-12">
+            {/* Metadata Card */}
+            <div className="space-y-8">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 border-b border-white/5 pb-4">Case Metadata</h2>
+              
+              <div className="grid grid-cols-2 gap-8 text-[10px] uppercase tracking-widest">
+                <div>
+                  <span className="text-gray-600 block mb-2">Severity</span>
+                  <span className={`font-medium ${caseObj.severity === 'CRITICAL' ? 'text-red-500' : caseObj.severity === 'HIGH' ? 'text-accentGold' : 'text-white'}`}>{caseObj.severity}</span>
+                </div>
+                <div>
+                  <span className="text-gray-600 block mb-2">Assigned To</span>
+                  <span className="font-medium text-white">{caseObj.assigned_to || "Unassigned"}</span>
+                </div>
+                {session && (
+                  <>
+                    <div>
+                      <span className="text-gray-600 block mb-2">Citizen Target</span>
+                      <span className="font-mono text-white">{session.citizen_identifier}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 block mb-2">Suspect Phone</span>
+                      <span className="font-mono text-white">{session.suspect_identifier}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className="pt-4">
+                <span className="text-[10px] text-gray-600 uppercase block font-medium tracking-widest mb-4">Incident Profile Summary</span>
+                <p className="font-serif text-lg text-gray-300 font-light leading-relaxed">{caseObj.description}</p>
+              </div>
+            </div>
+
+            {/* Analyst Review Feedback Form */}
+            <div className="border border-white/5 bg-background/30 p-8 space-y-8 backdrop-blur-sm">
+              <div>
+                <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-white flex items-center gap-3 mb-2">
+                  <UserCheck className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                  Post-Audit Verdict Review
+                </h2>
+                <p className="text-[10px] font-light text-gray-500">
+                  Audit the auto-verdict for reporting accuracy (does not retrain downstream rules).
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmitFeedback} className="space-y-6">
+                <div>
+                  <label className="text-[9px] font-medium uppercase tracking-widest text-gray-500 block mb-3">Resolution Verdict</label>
+                  <select
+                    value={analystVerdict}
+                    onChange={(e) => setAnalystVerdict(e.target.value)}
+                    className="w-full bg-transparent border-b border-white/20 pb-2 text-[11px] uppercase tracking-widest text-white focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white"
+                  >
+                    <option value="UNRESOLVED">Unresolved / In Investigation</option>
+                    <option value="CONFIRMED_SUSPICIOUS">Confirmed Coercive Scam</option>
+                    <option value="FALSE_POSITIVE">False Positive (Benign support)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[9px] font-medium uppercase tracking-widest text-gray-500 block mb-3">Audit Trail Notes</label>
+                  <textarea
+                    placeholder="Provide detailed justification for the verification audit..."
+                    value={feedbackNotes}
+                    onChange={(e) => setFeedbackNotes(e.target.value)}
+                    rows={3}
+                    className="w-full bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light placeholder-gray-600 focus:outline-none focus:border-accentGold transition-colors resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submittingFeedback}
+                  className="w-full border border-accentGold text-accentGold hover:bg-accentGold hover:text-black py-4 text-[10px] uppercase tracking-widest font-medium transition-colors disabled:opacity-50"
+                >
+                  {submittingFeedback ? "Saving Verdict..." : "Save Audit Verdict"}
+                </button>
+              </form>
+            </div>
+
+            {/* Evidence packages log */}
+            <div className="space-y-8 pt-4 border-t border-white/5">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">Evidence Packages Log</h2>
+
+              {/* Log form */}
+              <form onSubmit={handleAddEvidence} className="space-y-6 bg-white/[0.02] p-6 border border-white/5">
+                <input
+                  type="text"
+                  placeholder="Evidence Title (e.g. Noida Tower Log)"
+                  value={evName}
+                  onChange={(e) => setEvName(e.target.value)}
+                  className="w-full bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light placeholder-gray-600 focus:outline-none focus:border-accentGold transition-colors"
+                />
+                <textarea
+                  placeholder="Description / SHA hash checksum notes"
+                  value={evDesc}
+                  onChange={(e) => setEvDesc(e.target.value)}
+                  rows={2}
+                  className="w-full bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light placeholder-gray-600 focus:outline-none focus:border-accentGold transition-colors resize-none"
+                />
+                <button
+                  type="submit"
+                  disabled={uploadingEv}
+                  className="w-full border border-white/20 hover:border-white/60 py-3 text-[10px] uppercase tracking-widest font-medium transition-colors text-white disabled:opacity-50"
+                >
+                  {uploadingEv ? "Logging Evidence..." : "Add Synthetic Evidence Log"}
+                </button>
+              </form>
+
+              <div className="space-y-4">
+                {evidenceList.length === 0 ? (
+                  <p className="text-[10px] uppercase tracking-widest font-light text-gray-600 text-center py-4">No evidence logs posted yet.</p>
+                ) : (
+                  evidenceList.map((ev, idx) => (
+                    <div key={idx} className="border-l-2 border-accentGold pl-4 py-2 space-y-2">
+                      <div className="flex items-center justify-between text-white font-medium">
+                        <span className="flex items-center gap-3 text-[10px] uppercase tracking-widest">
+                          <FileCode className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                          {ev.name}
+                        </span>
+                        <span className="text-[9px] uppercase tracking-widest text-gray-500">
+                          {formatDistanceToNow(new Date(ev.created_at))} ago
+                        </span>
+                      </div>
+                      <p className="text-gray-400 font-light text-sm">{ev.description}</p>
+                      <p className="text-[9px] text-gray-600 font-mono select-all tracking-widest">SHA-256: {ev.file_hash.substring(0, 24)}...</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Case Logs & Analyst Notes (7 cols) */}
+          <div className="lg:col-span-7 space-y-8 flex flex-col lg:border-l lg:border-white/5 lg:pl-12 pt-12 lg:pt-0">
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 border-b border-white/5 pb-4">Analyst Action Log</h2>
 
             {/* Note post form */}
-            <form onSubmit={handlePostNote} className="flex gap-3">
-              <input
-                type="text"
+            <form onSubmit={handlePostNote} className="flex flex-col gap-6 pt-4">
+              <textarea
                 placeholder="Type analyst action notes..."
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
-                className="flex-1 rounded bg-slate-800 border border-borderBg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-accentTeal"
+                rows={4}
+                className="w-full bg-background/50 border border-white/10 p-4 text-sm text-white font-light placeholder-gray-600 focus:outline-none focus:border-accentGold transition-colors resize-none"
               />
               <button
                 type="submit"
                 disabled={postingNote}
-                className="bg-accentTeal hover:bg-cyan-500 text-black px-4 py-2 rounded text-xs font-semibold flex items-center gap-1.5 transition disabled:opacity-50"
+                className="self-end bg-accentGold hover:bg-white text-black px-8 py-3 text-[10px] uppercase tracking-widest font-medium flex items-center gap-3 transition-colors disabled:opacity-50"
               >
-                <Send className="h-3.5 w-3.5 text-black" />
+                <Send className="h-3.5 w-3.5" strokeWidth={1.5} />
                 Add Note
               </button>
             </form>
 
-            <div className="space-y-4 overflow-y-auto max-h-[450px] pr-2">
+            <div className="space-y-8 pt-8 overflow-y-auto max-h-[600px] pr-4">
               {notes.length === 0 ? (
-                <p className="text-xs text-gray-500 text-center py-6">No analyst logs recorded yet.</p>
+                <p className="text-[10px] uppercase tracking-widest font-light text-gray-600 text-center py-12 border border-white/5">No analyst logs recorded yet.</p>
               ) : (
                 notes.map((n, idx) => (
-                  <div key={idx} className="rounded-lg bg-slate-800/30 border border-borderBg p-4 space-y-2 text-xs">
-                    <div className="flex items-center justify-between text-gray-500 text-[10px] uppercase font-bold tracking-wider">
-                      <span>Author: {n.author}</span>
+                  <div key={idx} className="border-b border-white/5 pb-8 space-y-4">
+                    <div className="flex items-center justify-between text-[9px] uppercase tracking-widest text-gray-500 font-medium">
+                      <span className="text-accentGold">AUTHOR: {n.author}</span>
                       <span>{formatDistanceToNow(new Date(n.created_at))} ago</span>
                     </div>
-                    <p className="text-gray-200 leading-relaxed">{n.note_text}</p>
+                    <p className="font-serif text-xl font-light text-gray-300 leading-relaxed">{n.note_text}</p>
                   </div>
                 ))
               )}

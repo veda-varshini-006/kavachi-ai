@@ -137,165 +137,177 @@ export default function GeospatialMap() {
   ].filter(Boolean);
 
   return (
-    <div className="h-[calc(100vh-6rem)] flex flex-col space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between shrink-0">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Compass className="h-6 w-6 text-accentTeal" />
-            Geospatial Intelligence Layer
-          </h1>
-          <p className="text-sm text-gray-400">
-            Privacy-preserving spatial aggregation and hotspot analysis for cybercrime nodes.
-          </p>
+    <div className="h-[calc(100vh-6rem)] flex flex-col space-y-4 relative">
+      {/* Background Image for Map Module with Izanami Blend */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="/map-bg.jpg"
+          alt="Topographic Map Background"
+          className="w-full h-full object-cover opacity-10 mix-blend-luminosity"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/95 to-background" />
+      </div>
+
+      <div className="flex flex-col space-y-4 h-full relative z-10 max-w-[1600px] mx-auto w-full pt-4">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/5 pb-8 shrink-0">
+          <div>
+            <h1 className="font-serif text-3xl text-white font-medium mb-3 flex items-center gap-3">
+              <Compass className="h-6 w-6 text-accentGold" strokeWidth={1.5} />
+              Geospatial Intelligence Layer
+            </h1>
+            <p className="text-sm text-gray-500 font-light max-w-2xl leading-relaxed tracking-wide">
+              Privacy-preserving spatial aggregation and hotspot analysis for cybercrime nodes.
+            </p>
+          </div>
+          
+          {/* Controls */}
+          <div className="flex gap-4 items-center pt-4 md:pt-0">
+            <div className="border-b border-white/20 pb-2 flex items-center gap-4">
+              <div className="flex items-center gap-3 text-xs text-gray-400 font-light tracking-widest uppercase">
+                <Clock className="w-3.5 h-3.5 text-accentGold" strokeWidth={1.5} />
+                <span>Time: Last {timeWindow}h</span>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="72" 
+                  value={timeWindow} 
+                  onChange={e => setTimeWindow(parseInt(e.target.value))}
+                  className="ml-2 accent-accentGold w-24"
+                />
+              </div>
+              <div className="w-px h-4 bg-white/10"></div>
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="bg-transparent text-xs text-gray-300 font-light uppercase tracking-widest focus:outline-none focus:text-white [&>option]:bg-background [&>option]:text-white"
+              >
+                <option value="">All Events</option>
+                <option value="CALL_THREAT">Scam Calls</option>
+                <option value="NOTE_SCAN">Note Scans</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 flex gap-8 min-h-0 pt-4">
+          {/* Map Container */}
+          <div className="flex-1 relative border border-white/5 bg-background/50 backdrop-blur-sm">
+            {/* Layer Toggles Floating over map */}
+            <div className="absolute top-6 left-6 z-10 bg-background/80 backdrop-blur-md border border-white/10 p-4 flex flex-col gap-4">
+              <label className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-gray-300 cursor-pointer hover:text-white transition-colors">
+                <input type="checkbox" checked={showHeatmap} onChange={e => setShowHeatmap(e.target.checked)} className="accent-accentGold" />
+                Hotspot Density
+              </label>
+              <label className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-gray-300 cursor-pointer hover:text-white transition-colors">
+                <input type="checkbox" checked={showScatter} onChange={e => setShowScatter(e.target.checked)} className="accent-accentGold" />
+                Discrete Nodes
+              </label>
+            </div>
+
+            <DeckGL
+              initialViewState={INITIAL_VIEW_STATE}
+              controller={true}
+              layers={layers}
+              getTooltip={({object}) => object && (object.title || `Hotspot Score: ${object.hotspot_score}`)}
+            >
+              <Map
+                mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+              />
+            </DeckGL>
+          </div>
+
+          {/* Intelligence Side Drawer */}
+          <div className="w-96 shrink-0 border-l border-white/5 pl-8 overflow-y-auto hidden lg:block">
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 mb-8 flex items-center gap-3">
+              <ShieldAlert className="w-4 h-4 text-accentGold" strokeWidth={1.5} />
+              Intelligence Detail
+            </h2>
+
+            {selectedEvent ? (
+              <div className="space-y-8">
+                <div>
+                  <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500">Node Identified</span>
+                  <p className="font-serif text-xl font-light text-white mt-2">{selectedEvent.title}</p>
+                </div>
+
+                {/* Privacy Transformation Display */}
+                <div className="border-t border-b border-white/5 py-6 space-y-4">
+                  <span className="text-[9px] uppercase tracking-widest font-medium text-accentGold block">Privacy Masking Active</span>
+                  <div className="flex justify-between items-center text-xs text-gray-400 font-light">
+                    <span>Method:</span>
+                    <span className="font-mono text-white/70">{selectedEvent.privacy_transformation}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-gray-400 font-light">
+                    <span>Precision:</span>
+                    <span className="font-mono text-white/70">{selectedEvent.aggregation_level}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500">Geospatial Coordinates</span>
+                  <p className="text-xs font-mono text-gray-400 font-light">
+                    LAT: {selectedEvent.latitude.toFixed(4)} <br />
+                    LON: {selectedEvent.longitude.toFixed(4)}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500 block">Threat Indicators</span>
+                  <div className="flex items-center gap-4">
+                    <span
+                      className={`text-[9px] font-medium tracking-widest px-2 py-1 uppercase border ${
+                        selectedEvent.risk_score >= 80
+                          ? "text-red-500 border-red-500/30"
+                          : "text-accentGold border-accentGold/30"
+                      }`}
+                    >
+                      {selectedEvent.risk_score >= 80 ? "Critical" : "Warning"}
+                    </span>
+                    <span className="text-[10px] uppercase tracking-widest text-gray-500">Score: {selectedEvent.risk_score}%</span>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/5 pt-6 space-y-3">
+                  <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500 block">Metadata</span>
+                  <p className="text-xs text-gray-400 font-light leading-relaxed">{selectedEvent.description}</p>
+                  <div className="text-[9px] uppercase tracking-widest text-gray-600 mt-4 space-y-1">
+                    <p>Source: {selectedEvent.provenance || "Internal"}</p>
+                    <p>Recorded: {formatDistanceToNow(new Date(selectedEvent.timestamp))} ago</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="h-48 flex flex-col items-center justify-center text-center text-gray-500">
+                <MapPin className="h-6 w-6 text-accentGold mb-4 opacity-50" strokeWidth={1.5} />
+                <p className="text-[10px] uppercase tracking-widest font-light">Select a node to inspect logs.</p>
+              </div>
+            )}
+          </div>
         </div>
         
-        {/* Controls */}
-        <div className="flex gap-4 items-center">
-          <div className="bg-cardBg border border-borderBg rounded-lg p-2 flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-gray-300">
-              <Clock className="w-4 h-4 text-gray-500" />
-              <span>Time Window: Last {timeWindow} hours</span>
-              <input 
-                type="range" 
-                min="1" 
-                max="72" 
-                value={timeWindow} 
-                onChange={e => setTimeWindow(parseInt(e.target.value))}
-                className="ml-2 accent-accentTeal"
-              />
-            </div>
-            <div className="w-px h-4 bg-borderBg"></div>
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="bg-transparent text-sm text-gray-300 focus:outline-none"
-            >
-              <option value="">All Event Types</option>
-              <option value="CALL_THREAT">Scam Calls</option>
-              <option value="NOTE_SCAN">Note Scans</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 flex gap-4 min-h-0">
-        {/* Map Container */}
-        <div className="flex-1 relative rounded-xl overflow-hidden border border-borderBg bg-cardBg">
-          {/* Layer Toggles Floating over map */}
-          <div className="absolute top-4 left-4 z-10 bg-cardBg/90 backdrop-blur border border-borderBg rounded-lg p-2 flex flex-col gap-2 shadow-xl">
-            <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-              <input type="checkbox" checked={showHeatmap} onChange={e => setShowHeatmap(e.target.checked)} className="accent-accentTeal" />
-              Hotspot Density
-            </label>
-            <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-              <input type="checkbox" checked={showScatter} onChange={e => setShowScatter(e.target.checked)} className="accent-accentTeal" />
-              Discrete Nodes
-            </label>
-          </div>
-
-          <DeckGL
-            initialViewState={INITIAL_VIEW_STATE}
-            controller={true}
-            layers={layers}
-            getTooltip={({object}) => object && (object.title || `Hotspot Score: ${object.hotspot_score}`)}
-          >
-            <Map
-              mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-            />
-          </DeckGL>
-        </div>
-
-        {/* Intelligence Side Drawer */}
-        <div className="w-96 shrink-0 rounded-xl border border-borderBg bg-cardBg p-5 overflow-y-auto">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-6 flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4" />
-            Intelligence Detail
-          </h2>
-
-          {selectedEvent ? (
-            <div className="space-y-6">
-              <div>
-                <span className="text-[10px] uppercase font-bold text-gray-500">Node Identified</span>
-                <p className="text-sm font-bold text-white mt-1">{selectedEvent.title}</p>
-              </div>
-
-              {/* Privacy Transformation Display */}
-              <div className="bg-slate-900/50 rounded-lg p-3 border border-borderBg/50">
-                <span className="text-[10px] uppercase font-bold text-accentAmber block mb-1">Privacy Masking Active</span>
-                <div className="flex justify-between items-center text-xs text-gray-300">
-                  <span>Method:</span>
-                  <span className="font-mono">{selectedEvent.privacy_transformation}</span>
-                </div>
-                <div className="flex justify-between items-center text-xs text-gray-300 mt-1">
-                  <span>Precision:</span>
-                  <span className="font-mono">{selectedEvent.aggregation_level}</span>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] uppercase font-bold text-gray-500">Geospatial Coordinates</span>
-                <p className="text-xs font-mono text-gray-300 mt-1">
-                  LAT: {selectedEvent.latitude.toFixed(4)} <br />
-                  LON: {selectedEvent.longitude.toFixed(4)}
-                </p>
-              </div>
-
-              <div>
-                <span className="text-[10px] uppercase font-bold text-gray-500">Threat Indicators</span>
-                <div className="flex items-center gap-2 mt-2">
-                  <span
-                    className={`text-xs font-bold px-2 py-0.5 rounded uppercase ${
-                      selectedEvent.risk_score >= 80
-                        ? "bg-accentRed/10 text-accentRed border border-accentRed/20"
-                        : "bg-accentAmber/10 text-accentAmber border border-accentAmber/20"
-                    }`}
-                  >
-                    {selectedEvent.risk_score >= 80 ? "Critical" : "Warning"}
-                  </span>
-                  <span className="text-xs text-gray-400">Score: {selectedEvent.risk_score}%</span>
-                </div>
-              </div>
-
-              <div className="border-t border-borderBg pt-4 space-y-2">
-                <span className="text-[10px] uppercase font-bold text-gray-500">Metadata</span>
-                <p className="text-xs text-gray-300 leading-relaxed">{selectedEvent.description}</p>
-                <div className="text-[10px] text-gray-500 mt-2">
-                  Source: {selectedEvent.provenance || "Internal"} <br />
-                  Recorded: {formatDistanceToNow(new Date(selectedEvent.timestamp))} ago
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="h-48 flex flex-col items-center justify-center text-center text-gray-600">
-              <MapPin className="h-8 w-8 mb-2 opacity-50" />
-              <p className="text-xs">Select a discrete node or hotspot on the map to inspect intelligence logs.</p>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      {/* Table Fallback for Accessibility */}
-      <div className="sr-only">
-        <h2>Accessible Region Data</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Region</th>
-              <th>Center Latitude</th>
-              <th>Center Longitude</th>
-            </tr>
-          </thead>
-          <tbody>
-            {regions.map(r => (
-              <tr key={r.id}>
-                <td>{r.name}</td>
-                <td>{r.center_latitude}</td>
-                <td>{r.center_longitude}</td>
+        {/* Table Fallback for Accessibility */}
+        <div className="sr-only">
+          <h2>Accessible Region Data</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Center Latitude</th>
+                <th>Center Longitude</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {regions.map(r => (
+                <tr key={r.id}>
+                  <td>{r.name}</td>
+                  <td>{r.center_latitude}</td>
+                  <td>{r.center_longitude}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

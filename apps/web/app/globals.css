@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-gray-100 antialiased selection:bg-accentTeal selection:text-black;
+    @apply bg-background text-gray-100 antialiased selection:bg-accentGold/30 selection:text-white;
   }
 }
 

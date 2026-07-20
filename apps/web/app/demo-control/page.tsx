@@ -6,32 +6,34 @@ import { Play, Pause, FastForward, RotateCcw, AlertTriangle } from 'lucide-react
 export default function DemoControl() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [status, setStatus] = useState<string>('');
 
   const startScenario = async (scenarioId: string) => {
     setLoading(true);
     setResult(null);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/demo/replay/${scenarioId}/start`, {
+      const res = await fetch(`http://localhost:8001/api/v1/demo/replay/${scenarioId}/start`, {
         method: 'POST'
       });
-      const data = await res.json();
-      setResult(data);
-    } catch (e: any) {
-      setResult({ error: e.message });
+      if (res.ok) {
+        setStatus(`Scenario ${scenarioId} dispatched.`);
+      } else {
+        setStatus(`Failed to dispatch scenario ${scenarioId}`);
+      }
+    } catch (e) {
+      setStatus(`Network error starting scenario.`);
     }
     setLoading(false);
   };
 
-  const reconcileDeadLetters = async () => {
-    setLoading(true);
+  const syncAuditLogs = async () => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/ops/reconcile`, { method: 'POST' });
+      const res = await fetch(`http://localhost:8001/api/v1/ops/reconcile`, { method: 'POST' });
       const data = await res.json();
       setResult(data);
     } catch (e: any) {
       setResult({ error: e.message });
     }
-    setLoading(false);
   };
 
   return (

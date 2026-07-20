@@ -181,51 +181,65 @@ export default function CounterfeitScreening() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Title */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-          <Scan className="h-6 w-6 text-accentTeal" />
-          Suspect Currency Screening
-        </h1>
-        <p className="text-sm text-gray-400">
-          AI-assisted banknote layout anomaly detection. Screen watermarks, color shifts, and serial numbers.
-        </p>
+    <div className="relative min-h-screen pb-12">
+      {/* Background Image for Counterfeit Module with Izanami Blend */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="/counterfeit-bg.jpg"
+          alt="Abstract geometric nodes"
+          className="w-full h-full object-cover opacity-15 mix-blend-luminosity"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/95 to-background" />
       </div>
 
-      {/* Warning watermark */}
-      <div className="rounded border border-red-500/20 bg-red-500/5 p-4.5">
-        <span className="text-xs font-bold text-red-400 uppercase tracking-wider block">Screening Tool boundary notice</span>
-        <p className="text-xs text-gray-400 mt-1 leading-relaxed">
-          AI-ASSISTED SCREENING PROTOTYPE ONLY - NOT COURT ADMISSIBLE. Never distribute high-resolution currency templates. Physical security features and expert authentication are strictly required.
-        </p>
-      </div>
+      <div className="space-y-12 max-w-[1600px] mx-auto pt-4 relative z-10">
+        {/* Title */}
+        <div className="border-b border-white/5 pb-8">
+          <h1 className="font-serif text-4xl text-white font-medium mb-3 flex items-center gap-4">
+            <Scan className="h-6 w-6 text-accentGold" strokeWidth={1.5} />
+            Suspect Currency Screening
+          </h1>
+          <p className="text-sm text-gray-500 font-light max-w-2xl leading-relaxed tracking-wide">
+            AI-assisted banknote layout anomaly detection. Screen watermarks, color shifts, and serial numbers.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        {/* Left Column: Image scanner dropzone (7 cols) */}
-        <div className="lg:col-span-8 space-y-6">
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-6">
+        {/* Warning watermark */}
+        <div className="border border-red-500/20 bg-background/50 p-6 backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500/50" />
+          <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest block mb-2">Screening Tool Boundary Notice</span>
+          <p className="text-xs text-gray-400 leading-relaxed font-light">
+            AI-ASSISTED SCREENING PROTOTYPE ONLY - NOT COURT ADMISSIBLE. Never distribute high-resolution currency templates. Physical security features and expert authentication are strictly required.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* Left Column: Image scanner dropzone (7 cols) */}
+          <div className="lg:col-span-8 space-y-12">
+            <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 border-b border-white/5 pb-4">
+              Upload & Scan Interface
+            </h2>
             
-            <form onSubmit={handleScanSubmit} className="space-y-6">
+            <form onSubmit={handleScanSubmit} className="space-y-8">
               {/* Dropzone area */}
-              <div className="flex flex-col items-center justify-center border-2 border-dashed border-borderBg hover:border-accentTeal rounded-lg p-8 bg-background/20 transition cursor-pointer relative">
+              <div className="flex flex-col items-center justify-center border border-dashed border-white/20 hover:border-accentGold bg-background/30 p-12 transition-colors cursor-pointer relative group backdrop-blur-sm">
                 <input
                   type="file"
                   accept="image/jpeg,image/png"
                   onChange={handleFileChange}
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  className="absolute inset-0 opacity-0 cursor-pointer z-10"
                 />
                 
                 {previewUrl ? (
                   <div className="relative max-w-full">
                     {/* Render preview image with absolute scaled overlays */}
-                    <img src={previewUrl} alt="Banknote preview" className="rounded max-h-[300px] border border-borderBg" />
+                    <img src={previewUrl} alt="Banknote preview" className="max-h-[400px] border border-white/10 opacity-80" />
                     
                     {/* Render Anomaly Regions Overlay on top */}
                     {result && !imageDeleted && result.anomaly_regions.map((reg, idx) => (
                       <div
                         key={idx}
-                        className="absolute border-2 border-accentRed bg-accentRed/10 cursor-help group"
+                        className="absolute border border-accentGold bg-accentGold/10 cursor-help group/reg"
                         style={{
                           left: `${(reg.x / 1200) * 100}%`,
                           top: `${(reg.y / 570) * 100}%`,
@@ -234,28 +248,28 @@ export default function CounterfeitScreening() {
                         }}
                         title={reg.description}
                       >
-                        <span className="absolute -top-5 left-0 bg-accentRed text-white text-[9px] font-bold px-1 rounded truncate max-w-[150px]">
+                        <span className="absolute -top-6 left-0 bg-background border border-accentGold text-accentGold text-[8px] uppercase tracking-widest px-2 py-1 truncate max-w-[200px] shadow-lg">
                           {reg.description}
                         </span>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center space-y-2.5">
-                    <Upload className="h-8 w-8 text-gray-500 mx-auto" />
-                    <p className="text-xs text-gray-300">Drag & drop JPEGs/PNGs here or click to select</p>
-                    <p className="text-[10px] text-gray-500">MIME limits: image/jpeg or image/png under 8MB</p>
+                  <div className="text-center space-y-4">
+                    <Upload className="h-8 w-8 text-gray-500 group-hover:text-accentGold transition-colors mx-auto" strokeWidth={1.5} />
+                    <p className="text-sm font-light text-gray-300">Drag & drop JPEGs/PNGs here or click to select</p>
+                    <p className="text-[10px] uppercase tracking-widest text-gray-600">MIME limits: image/jpeg or image/png under 8MB</p>
                   </div>
                 )}
               </div>
 
               {/* Action buttons */}
               {file && (
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-6">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 bg-accentTeal hover:bg-cyan-500 text-black py-2.5 rounded text-xs font-bold transition disabled:opacity-50"
+                    className="flex-1 bg-accentGold hover:bg-white text-black py-4 text-[10px] uppercase tracking-widest font-medium transition-colors disabled:opacity-50"
                   >
                     {loading ? "Analyzing image..." : "Scan & Screen Suspect Note"}
                   </button>
@@ -264,9 +278,9 @@ export default function CounterfeitScreening() {
                     type="button"
                     onClick={handleCreateCaseScan}
                     disabled={loading}
-                    className="bg-slate-800 hover:bg-slate-700 text-white px-5 rounded text-xs font-semibold border border-borderBg transition flex items-center gap-1.5"
+                    className="flex-1 border border-white/20 hover:border-accentGold text-white hover:text-accentGold py-4 text-[10px] uppercase tracking-widest font-medium transition-colors flex items-center justify-center gap-3 disabled:opacity-50"
                   >
-                    <PlusCircle className="h-4 w-4" />
+                    <PlusCircle className="h-4 w-4" strokeWidth={1.5} />
                     Escalate Seizure case
                   </button>
                 </div>
@@ -275,62 +289,56 @@ export default function CounterfeitScreening() {
 
             {/* Scanned Results Panels */}
             {result && (
-              <div className="border-t border-borderBg/50 pt-6 space-y-6">
+              <div className="space-y-12">
                 
                 {/* Result Headline Card */}
-                <div className={`rounded-lg border p-4 flex justify-between items-center ${
-                  result.verdict === "LIKELY_GENUINE"
-                    ? "bg-emerald-500/5 border-emerald-500/20"
-                    : result.verdict === "SUSPECT_COUNTERFEIT"
-                    ? "bg-accentRed/5 border-accentRed/20"
-                    : "bg-accentAmber/5 border-accentAmber/20"
-                }`}>
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Screening Verdict:</span>
-                    <h3 className={`text-base font-extrabold flex items-center gap-2 ${
+                <div className="border-b border-white/5 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                  <div className="space-y-2">
+                    <span className="text-[10px] text-gray-500 font-medium uppercase tracking-[0.2em] block mb-4">Screening Verdict</span>
+                    <h3 className={`font-serif text-3xl font-light flex items-center gap-4 ${
                       result.verdict === "LIKELY_GENUINE"
                         ? "text-emerald-500"
                         : result.verdict === "SUSPECT_COUNTERFEIT"
-                        ? "text-accentRed"
-                        : "text-accentAmber"
+                        ? "text-red-500"
+                        : "text-accentGold"
                     }`}>
                       {result.verdict === "LIKELY_GENUINE" ? (
-                        <ShieldCheck className="h-5 w-5" />
+                        <ShieldCheck className="h-6 w-6" strokeWidth={1.5} />
                       ) : (
-                        <ShieldAlert className="h-5 w-5" />
+                        <ShieldAlert className="h-6 w-6" strokeWidth={1.5} />
                       )}
-                      {result.verdict}
+                      {result.verdict.replace(/_/g, " ")}
                     </h3>
                   </div>
 
-                  <div className="text-right space-y-0.5">
-                    <span className="text-[10px] text-gray-500 font-bold uppercase block">Risk Score:</span>
-                    <span className="text-sm font-bold text-white">{(result.risk_score * 100).toFixed(0)}%</span>
+                  <div className="text-left md:text-right space-y-2">
+                    <span className="text-[10px] text-gray-500 font-medium uppercase tracking-[0.2em] block">Risk Score</span>
+                    <span className="font-serif text-4xl text-white font-light">{(result.risk_score * 100).toFixed(0)}%</span>
                   </div>
                 </div>
 
                 {/* Features checklists and anomalies logs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm font-light">
                   
                   {/* Visual Consistency Checklist */}
-                  <div className="bg-background/30 p-4.5 rounded-lg border border-borderBg/40 space-y-3">
-                    <h4 className="font-bold text-white uppercase tracking-wider text-[10px]">Visual Consistency Checks</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-medium text-gray-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">Visual Consistency Checks</h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center border-b border-white/5 pb-2">
                         <span className="text-gray-400">Layout Alignment</span>
-                        <span className={result.feature_checks.layout_alignment ? "text-emerald-500" : "text-accentRed"}>
+                        <span className={`text-[10px] uppercase tracking-widest font-medium ${result.feature_checks.layout_alignment ? "text-emerald-500" : "text-red-500"}`}>
                           {result.feature_checks.layout_alignment ? "Consistent" : "Discrepancy"}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center border-b border-white/5 pb-2">
                         <span className="text-gray-400">Serial Format Plausibility</span>
-                        <span className={result.feature_checks.serial_format ? "text-emerald-500" : "text-accentRed"}>
+                        <span className={`text-[10px] uppercase tracking-widest font-medium ${result.feature_checks.serial_format ? "text-emerald-500" : "text-red-500"}`}>
                           {result.feature_checks.serial_format ? "Valid Structure" : "Malformed Pattern"}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center border-b border-white/5 pb-2">
                         <span className="text-gray-400">Exposure Focus Level</span>
-                        <span className={result.feature_checks.focus_check ? "text-emerald-500" : "text-accentRed"}>
+                        <span className={`text-[10px] uppercase tracking-widest font-medium ${result.feature_checks.focus_check ? "text-emerald-500" : "text-red-500"}`}>
                           {result.feature_checks.focus_check ? "In Focus" : "Blur Mismatch"}
                         </span>
                       </div>
@@ -338,13 +346,13 @@ export default function CounterfeitScreening() {
                   </div>
 
                   {/* Quality metrics and controls */}
-                  <div className="bg-background/30 p-4.5 rounded-lg border border-borderBg/40 space-y-3">
-                    <h4 className="font-bold text-white uppercase tracking-wider text-[10px]">Quality Indicators & Storage</h4>
-                    <div className="space-y-3">
+                  <div className="space-y-6">
+                    <h4 className="text-[10px] font-medium text-gray-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">Quality Indicators & Storage</h4>
+                    <div className="space-y-6">
                       <div>
-                        <span className="text-gray-500 block text-[10px]">Quality Score ({result.quality_score * 100}%)</span>
-                        <div className="w-full bg-slate-800 rounded-full h-1.5 mt-1 overflow-hidden">
-                          <div className="bg-accentTeal h-1.5 rounded-full" style={{ width: `${result.quality_score * 100}%` }}></div>
+                        <span className="text-[10px] uppercase tracking-widest text-gray-400 block mb-3">Quality Score / {(result.quality_score * 100).toFixed(0)}%</span>
+                        <div className="w-full bg-background border border-white/10 h-1 relative">
+                          <div className="bg-accentGold h-1 absolute left-0 top-0" style={{ width: `${result.quality_score * 100}%` }}></div>
                         </div>
                       </div>
 
@@ -352,9 +360,9 @@ export default function CounterfeitScreening() {
                       <button
                         onClick={handleDeleteImage}
                         disabled={imageDeleted}
-                        className="w-full flex items-center justify-center gap-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 py-1.5 border border-red-500/30 rounded text-[11px] font-bold transition disabled:opacity-50"
+                        className="w-full flex items-center justify-center gap-3 border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white py-3 text-[10px] uppercase tracking-widest font-medium transition-colors disabled:opacity-50"
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
                         {imageDeleted ? "Original image deleted" : "Delete Original Image"}
                       </button>
                     </div>
@@ -362,84 +370,90 @@ export default function CounterfeitScreening() {
                 </div>
 
                 {/* Case attachment section */}
-                {linkedCaseId ? (
-                  <div className="bg-slate-800/60 p-4 rounded border border-borderBg text-xs flex justify-between items-center">
-                    <span className="text-gray-400 flex items-center gap-1">
-                      <Link2 className="h-4 w-4 text-accentTeal" />
-                      Associated Case ID:
-                    </span>
-                    <span className="font-mono text-white font-bold">{linkedCaseId}</span>
-                  </div>
-                ) : (
-                  cases.length > 0 && (
-                    <div className="border-t border-borderBg/50 pt-4 flex gap-4 items-center">
-                      <label className="text-xs text-gray-400 shrink-0">Associate with Case Queue:</label>
-                      <select
-                        value={selectedCaseId}
-                        onChange={(e) => setSelectedCaseId(e.target.value)}
-                        className="flex-1 bg-slate-800 text-xs text-white border border-borderBg rounded px-2.5 py-1.5 focus:outline-none"
-                      >
-                        {cases.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.title} ({c.status})
-                          </option>
-                        ))}
-                      </select>
+                <div className="pt-8">
+                  {linkedCaseId ? (
+                    <div className="bg-background/50 p-6 border border-white/10 flex justify-between items-center">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-400 flex items-center gap-3">
+                        <Link2 className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                        Associated Case ID
+                      </span>
+                      <span className="font-mono text-white text-sm">{linkedCaseId}</span>
                     </div>
-                  )
-                )}
+                  ) : (
+                    cases.length > 0 && (
+                      <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                        <label className="text-[10px] uppercase tracking-widest text-gray-400 shrink-0">Associate with Case Queue:</label>
+                        <select
+                          value={selectedCaseId}
+                          onChange={(e) => setSelectedCaseId(e.target.value)}
+                          className="flex-1 w-full bg-transparent border-b border-white/20 pb-2 text-[11px] uppercase tracking-widest text-white focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white"
+                        >
+                          {cases.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.title} ({c.status})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )
+                  )}
+                </div>
 
               </div>
             )}
 
           </div>
-        </div>
 
-        {/* Right Column: Synthetic Perturbation Evaluations Benchmarks (5 cols) */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="rounded-xl border border-borderBg bg-cardBg p-5 space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
-              <FileSpreadsheet className="h-4.5 w-4.5 text-accentTeal" />
-              Perturbation Evaluation splits
-            </h2>
+          {/* Right Column: Synthetic Perturbation Evaluations Benchmarks (5 cols) */}
+          <div className="lg:col-span-4 lg:border-l lg:border-white/5 lg:pl-12 pt-12 lg:pt-0">
+            <div className="space-y-8">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 border-b border-white/5 pb-4 flex items-center gap-3">
+                <FileSpreadsheet className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                Perturbation Evaluation splits
+              </h2>
 
-            {evalData ? (
-              <div className="space-y-4 text-xs">
-                {/* Metrics list */}
-                <div className="bg-background/40 p-4.5 rounded-lg border border-borderBg/50 space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Total Benchmark Cases</span>
-                    <span className="font-mono text-white">{evalData.metrics_summary.total_benchmark_cases}</span>
+              {evalData ? (
+                <div className="space-y-12">
+                  {/* Metrics list */}
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-400">Total Benchmark Cases</span>
+                      <span className="font-mono text-xl text-white font-light">{evalData.metrics_summary.total_benchmark_cases}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-400">Macro-F1 Accuracy</span>
+                      <span className="font-mono text-xl text-white font-light">{(evalData.metrics_summary.accuracy * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-400">False Acceptance Rate (FAR)</span>
+                      <span className="font-mono text-xl text-white font-light">{(evalData.metrics_summary.false_acceptance_rate * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-400">Manual-Review Abstention</span>
+                      <span className="font-mono text-xl text-white font-light">{(evalData.metrics_summary.abstention_manual_review_rate * 100).toFixed(0)}%</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Macro-F1 Accuracy</span>
-                    <span className="font-mono text-white">{(evalData.metrics_summary.accuracy * 100).toFixed(0)}%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">False Acceptance Rate (FAR)</span>
-                    <span className="font-mono text-white">{(evalData.metrics_summary.false_acceptance_rate * 100).toFixed(0)}%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400">Manual-Review Abstention Rate</span>
-                    <span className="font-mono text-white">{(evalData.metrics_summary.abstention_manual_review_rate * 100).toFixed(0)}%</span>
+
+                  {/* Performance Splits Labels */}
+                  <div className="space-y-6">
+                    <div className="bg-background/30 p-6 border border-white/5 space-y-4">
+                      <span className="text-[10px] text-accentGold font-medium uppercase tracking-[0.2em] block">Synthetic Perturbations Accuracy</span>
+                      <p className="font-serif text-lg text-gray-300 font-light leading-relaxed">
+                        {(evalData.performance_splits.synthetic_perturbations_performance.accuracy * 100).toFixed(0)}% accuracy score on programmatically perturbed watermarked templates.
+                      </p>
+                    </div>
+                    <div className="bg-background/30 p-6 border border-white/5 space-y-4">
+                      <span className="text-[10px] text-gray-500 font-medium uppercase tracking-[0.2em] block">Real-World Production Accuracy</span>
+                      <p className="text-[10px] uppercase tracking-widest text-gray-600 leading-relaxed">
+                        Notice: real-world currency performance is untested. Platform remains an analyst prototype simulation only.
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                {/* Performance Splits Labels */}
-                <div className="space-y-3">
-                  <div className="p-3 bg-slate-800/40 border border-borderBg/50 rounded space-y-1">
-                    <span className="text-[10px] text-accentTeal font-bold uppercase tracking-wider">Synthetic Perturbations Accuracy</span>
-                    <p className="text-[10px] text-gray-400">{(evalData.performance_splits.synthetic_perturbations_performance.accuracy * 100).toFixed(0)}% accuracy score on programmatically perturbed watermarked templates.</p>
-                  </div>
-                  <div className="p-3 bg-slate-800/40 border border-borderBg/50 rounded space-y-1">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Real-World Production Accuracy</span>
-                    <p className="text-[10px] text-slate-500">Notice: real-world currency performance is untested. Platform remains an analyst prototype simulation only.</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-gray-500 py-6 text-center">Loading evaluation metrics...</p>
-            )}
+              ) : (
+                <p className="text-[10px] uppercase tracking-widest font-light text-gray-600 text-center py-12 border border-white/5">Loading evaluation metrics...</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

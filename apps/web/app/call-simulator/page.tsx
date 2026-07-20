@@ -16,7 +16,7 @@ import {
   Trash2,
   HelpCircle
 } from "lucide-react";
-import { GOLDEN_SESSION_ID } from "@/lib/constants";
+const GOLDEN_SESSION_ID = "SESSION-888-DEMO";
 
 interface Segment {
   id?: string;
@@ -99,7 +99,7 @@ export default function CallSimulator() {
   const connectWebSocket = (isReconnect = false) => {
     if (socketRef.current) return;
 
-    const wsUrl = `ws://localhost:8000/api/v1/sessions/${GOLDEN_SESSION_ID}/stream`;
+    const wsUrl = `ws://localhost:8001/api/v1/sessions/${GOLDEN_SESSION_ID}/stream`;
     logConnection(isReconnect ? "Attempting WebSocket reconnect..." : "Connecting to session stream...");
 
     const ws = new WebSocket(wsUrl);
@@ -328,407 +328,413 @@ export default function CallSimulator() {
   }, [segments]);
 
   return (
-    <div className="space-y-8 relative">
-      {/* Title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Phone className="h-6 w-6 text-accentTeal" />
-            Coercion Intercept Simulator
-          </h1>
-          <p className="text-sm text-gray-400">
-            Audit automatic banking freeze defenses by playing simulated scam conversations or testing live mic feedback.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className={`h-2.5 w-2.5 rounded-full ${socketConnected ? "bg-accentTeal animate-pulse" : "bg-gray-600"}`} />
-            <span className="text-xs text-gray-400 font-mono">{socketConnected ? "WS connected" : "WS idle"}</span>
-          </div>
-
-          <button
-            onClick={() => setShowDrawer(!showDrawer)}
-            className="flex items-center gap-1.5 rounded bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-xs text-white border border-borderBg transition"
-          >
-            <Sliders className="h-3.5 w-3.5" />
-            Operator Drawer
-          </button>
-        </div>
+    <div className="relative min-h-screen pb-12">
+      {/* Background Image for Call Simulator with Izanami Blend */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="/call-bg.jpg"
+          alt="Abstract Audio Soundwaves"
+          className="w-full h-full object-cover opacity-10 mix-blend-luminosity"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/95 to-background" />
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        {/* Left Console Panel (8 Columns) */}
-        <div className="lg:col-span-8 flex flex-col h-[680px] space-y-6">
-          
-          {/* Risk Stages Progression Bar */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-4.5">
-            <span className="text-[10px] text-gray-500 font-bold uppercase block mb-3 tracking-wider">
-              Rolling Coercion State Machine Stage
-            </span>
-            <div className="flex justify-between items-center gap-2">
-              {STAGES.map((stg) => {
-                const isActive = verdict?.stage === stg;
-                return (
-                  <div
-                    key={stg}
-                    className={`flex-1 rounded py-2 px-3 text-center text-xs font-bold border transition duration-300 ${
-                      isActive
-                        ? stg === "FINANCIAL_ACTION"
-                          ? "bg-accentRed/10 text-accentRed border-accentRed/40 shadow-lg animate-pulse"
-                          : stg === "COERCION"
-                          ? "bg-accentAmber/10 text-accentAmber border-accentAmber/40"
-                          : "bg-accentTeal/10 text-accentTeal border-accentTeal/40"
-                        : "bg-slate-800/20 text-gray-500 border-borderBg/40"
-                    }`}
-                  >
-                    {stg.replace("_", " ")}
-                  </div>
-                );
-              })}
-            </div>
+      <div className="space-y-12 max-w-[1600px] mx-auto pt-4 relative z-10">
+        {/* Title */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
+          <div>
+            <h1 className="font-serif text-4xl text-white font-medium mb-3 flex items-center gap-4">
+              <Phone className="h-6 w-6 text-accentGold" strokeWidth={1.5} />
+              Coercion Intercept Simulator
+            </h1>
+            <p className="text-sm text-gray-500 font-light max-w-2xl leading-relaxed tracking-wide">
+              Audit automatic banking freeze defenses by playing simulated scam conversations or testing live mic feedback.
+            </p>
           </div>
 
-          {/* Audio controls bar */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-5 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-4">
-              {!sessionActive ? (
-                <button
-                  onClick={handleStartCall}
-                  className="flex items-center gap-2 rounded bg-emerald-600 hover:bg-emerald-500 px-4.5 py-2 text-xs font-bold text-white transition"
-                >
-                  <Phone className="h-4 w-4" />
-                  Answer Incoming Call
-                </button>
-              ) : (
-                <button
-                  onClick={handleEndCall}
-                  className="flex items-center gap-2 rounded bg-accentRed hover:bg-red-500 px-4.5 py-2 text-xs font-bold text-white transition"
-                >
-                  <PhoneOff className="h-4 w-4" />
-                  End Call Intercept
-                </button>
-              )}
-
-              {sessionActive && (
-                <>
-                  <button
-                    onClick={handleInjectNextSegment}
-                    className="flex items-center gap-1.5 rounded bg-accentTeal hover:bg-cyan-500 px-4 py-2 text-xs font-bold text-black transition"
-                  >
-                    <Play className="h-3.5 w-3.5" />
-                    Simulate Next Segment
-                  </button>
-
-                  <button
-                    onClick={toggleRecording}
-                    className={`flex items-center gap-1.5 rounded px-4 py-2 text-xs font-bold transition ${
-                      isRecording
-                        ? "bg-accentRed text-white animate-pulse"
-                        : "bg-slate-800 hover:bg-slate-700 text-gray-300 border border-borderBg"
-                    }`}
-                  >
-                    {isRecording ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
-                    {isRecording ? "Stop Capture" : "Capture Local Mic"}
-                  </button>
-                </>
-              )}
+          <div className="flex items-center gap-6 pb-1">
+            <div className="flex items-center gap-3">
+              <div className={`h-1.5 w-1.5 rounded-full ${socketConnected ? "bg-accentGold animate-pulse" : "bg-gray-700"}`} />
+              <span className="text-[10px] text-gray-500 font-mono uppercase tracking-widest">{socketConnected ? "WS connected" : "WS idle"}</span>
             </div>
 
             <button
-              onClick={handleDeleteSession}
-              className="flex items-center gap-1 text-gray-500 hover:text-accentRed transition text-xs font-bold"
-              title="Delete session database records"
+              onClick={() => setShowDrawer(!showDrawer)}
+              className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-400 hover:text-accentGold transition-colors"
             >
-              <Trash2 className="h-4 w-4" />
-              Reset Session Data
+              <Sliders className="h-3.5 w-3.5" strokeWidth={1.5} />
+              Operator Drawer
             </button>
-          </div>
-
-          {/* Transcript Pipeline Panel */}
-          <div className="flex-1 rounded-xl border border-borderBg bg-cardBg p-6 flex flex-col min-h-0">
-            {isRecording && (
-              <div className="flex items-center justify-between border-b border-borderBg/50 pb-3 mb-4 shrink-0">
-                <div className="flex items-center gap-2 text-xs text-accentRed font-bold uppercase tracking-wider">
-                  <span className="h-2 w-2 rounded-full bg-accentRed animate-ping" />
-                  Live Voice Input ({recordDuration}s)
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-[10px] text-gray-500 font-bold uppercase mr-1">Signal Level:</span>
-                  <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden border border-borderBg/50 flex">
-                    <div className="bg-accentRed h-full" style={{ width: `${micLevel}%` }} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-              {segments.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-6 text-gray-600">
-                  <Volume2 className="h-10 w-10 text-gray-700 mb-2 animate-bounce" />
-                  <p className="text-xs">Select or answer the call connection above to start testing.</p>
-                </div>
-              ) : (
-                segments.map((seg, idx) => {
-                  // Find anchored matching indicators for this segment ID
-                  const matchingIndicators = verdict?.detailed_indicators?.filter(
-                    (ind) => ind.matched_segment_id === seg.id
-                  ) || [];
-
-                  return (
-                    <div
-                      key={idx}
-                      className={`flex flex-col max-w-[85%] rounded-lg p-3.5 text-sm space-y-1.5 ${
-                        seg.speaker === "CITIZEN"
-                          ? "bg-slate-800/80 text-gray-200 mr-auto border border-borderBg/50"
-                          : "bg-accentTeal/10 text-white ml-auto border border-accentTeal/30"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-6 mb-1 text-[10px] uppercase font-bold tracking-wider text-gray-500">
-                        <span className="flex items-center gap-1">
-                          {seg.speaker}
-                          {seg.speaker === "SUSPECT" && (
-                            <span className="text-[9px] px-1 bg-accentRed/10 text-accentRed rounded">Unverified</span>
-                          )}
-                        </span>
-                        <span>Seq: #{seg.sequence_number}</span>
-                      </div>
-                      
-                      <p className="leading-relaxed">{seg.text}</p>
-
-                      {/* Display Anchored matched evidence indicator flags */}
-                      {matchingIndicators.map((ind, i) => (
-                        <div key={i} className="rounded bg-accentRed/10 border border-accentRed/25 p-2 mt-1.5 text-[10px] text-gray-300">
-                          <span className="font-bold text-accentRed uppercase tracking-wider block">
-                            Flagged Evidence: {ind.name}
-                          </span>
-                          <span className="block mt-0.5 text-gray-400">{ind.explanation}</span>
-                        </div>
-                      ))}
-
-                      {seg.ingest_latency_ms !== undefined && (
-                        <span className="text-[9px] text-gray-600 mt-2 block font-mono text-right">
-                          Latency: Ingest {seg.ingest_latency_ms ? `${seg.ingest_latency_ms.toFixed(0)}ms` : "0ms"} | Proc {seg.processing_latency_ms ? `${seg.processing_latency_ms.toFixed(0)}ms` : "0ms"}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })
-              )}
-              <div ref={transcriptEndRef} />
-            </div>
           </div>
         </div>
 
-        {/* Right Info Inspector (4 Columns) */}
-        <div className="lg:col-span-4 space-y-6">
-          
-          {/* Threat Monitor */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">
-              Scam Verdict Engine
-            </h2>
-
-            {verdict ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-borderBg/30 pb-3">
-                  <span className="text-xs text-gray-400 font-bold uppercase">Verdict</span>
-                  <span
-                    className={`rounded px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider ${
-                      verdict.verdict === "CRITICAL"
-                        ? "bg-accentRed/10 text-accentRed border border-accentRed/30"
-                        : verdict.verdict === "SUSPICIOUS"
-                        ? "bg-accentAmber/10 text-accentAmber border-accentAmber/30"
-                        : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/30"
-                    }`}
-                  >
-                    {verdict.verdict}
-                  </span>
-                </div>
-
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs text-gray-500 font-semibold">
-                    <span>Risk Rating Score</span>
-                    <span>{(verdict.normalized_risk_score * 100).toFixed(0)}%</span>
-                  </div>
-                  <div className="w-full h-2.5 rounded-full bg-background overflow-hidden border border-borderBg/50">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* Left Console Panel (8 Columns) */}
+          <div className="lg:col-span-8 flex flex-col h-[680px] space-y-8">
+            
+            {/* Risk Stages Progression Bar */}
+            <div className="border-t border-white/5 pt-6">
+              <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500 block mb-6">
+                Rolling Coercion State Machine Stage
+              </span>
+              <div className="flex justify-between items-center gap-4">
+                {STAGES.map((stg) => {
+                  const isActive = verdict?.stage === stg;
+                  return (
                     <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        verdict.normalized_risk_score >= 0.8
-                          ? "bg-accentRed"
-                          : verdict.normalized_risk_score >= 0.4
-                          ? "bg-accentAmber"
-                          : "bg-emerald-500"
+                      key={stg}
+                      className={`flex-1 py-3 text-center text-[10px] font-medium tracking-widest uppercase border-b transition-colors duration-500 ${
+                        isActive
+                          ? stg === "FINANCIAL_ACTION"
+                            ? "text-red-500 border-red-500 shadow-[0_4px_15px_-3px_rgba(239,68,68,0.3)] animate-pulse"
+                            : stg === "COERCION"
+                            ? "text-accentGold border-accentGold"
+                            : "text-accentGold border-accentGold"
+                          : "text-gray-600 border-white/5"
                       }`}
-                      style={{ width: `${verdict.normalized_risk_score * 100}%` }}
-                    />
+                    >
+                      {stg.replace("_", " ")}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Audio controls bar */}
+            <div className="border-t border-b border-white/5 py-6 flex flex-wrap gap-6 items-center justify-between shrink-0">
+              <div className="flex items-center gap-6">
+                {!sessionActive ? (
+                  <button
+                    onClick={handleStartCall}
+                    className="flex items-center gap-3 text-[10px] uppercase tracking-widest font-medium text-emerald-500 hover:text-white transition-colors"
+                  >
+                    <Phone className="h-4 w-4" strokeWidth={1.5} />
+                    Answer Incoming Call
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleEndCall}
+                    className="flex items-center gap-3 text-[10px] uppercase tracking-widest font-medium text-red-500 hover:text-white transition-colors"
+                  >
+                    <PhoneOff className="h-4 w-4" strokeWidth={1.5} />
+                    End Call Intercept
+                  </button>
+                )}
+
+                {sessionActive && (
+                  <>
+                    <button
+                      onClick={handleInjectNextSegment}
+                      className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-medium text-accentGold hover:text-white transition-colors"
+                    >
+                      <Play className="h-3.5 w-3.5" strokeWidth={1.5} />
+                      Simulate Next Segment
+                    </button>
+
+                    <button
+                      onClick={toggleRecording}
+                      className={`flex items-center gap-2 text-[10px] uppercase tracking-widest font-medium transition-colors ${
+                        isRecording
+                          ? "text-red-500 animate-pulse"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      {isRecording ? <MicOff className="h-3.5 w-3.5" strokeWidth={1.5} /> : <Mic className="h-3.5 w-3.5" strokeWidth={1.5} />}
+                      {isRecording ? "Stop Capture" : "Capture Local Mic"}
+                    </button>
+                  </>
+                )}
+              </div>
+
+              <button
+                onClick={handleDeleteSession}
+                className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-medium text-gray-500 hover:text-red-500 transition-colors"
+                title="Delete session database records"
+              >
+                <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Reset Session Data
+              </button>
+            </div>
+
+            {/* Transcript Pipeline Panel */}
+            <div className="flex-1 flex flex-col min-h-0 border border-white/5 bg-background/50 backdrop-blur-sm p-6">
+              {isRecording && (
+                <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6 shrink-0">
+                  <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest font-medium text-red-500">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
+                    Live Voice Input ({recordDuration}s)
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[9px] uppercase tracking-widest text-gray-500">Signal:</span>
+                    <div className="w-32 h-1 bg-white/5 overflow-hidden flex">
+                      <div className="bg-red-500 h-full transition-all duration-100" style={{ width: `${micLevel}%` }} />
+                    </div>
                   </div>
                 </div>
+              )}
 
-                <div className="pt-2 space-y-3">
-                  <div>
-                    <span className="text-[10px] text-gray-500 font-bold uppercase block">Coercion Pattern</span>
-                    <span className="text-xs font-semibold text-white mt-0.5 inline-block">{verdict.scam_type}</span>
+              <div className="flex-1 overflow-y-auto space-y-6 pr-4">
+                {segments.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-6 text-gray-600">
+                    <Volume2 className="h-8 w-8 text-accentGold mb-4 opacity-50" strokeWidth={1.5} />
+                    <p className="text-[10px] uppercase tracking-widest font-light">Select or answer the call to start.</p>
+                  </div>
+                ) : (
+                  segments.map((seg, idx) => {
+                    const matchingIndicators = verdict?.detailed_indicators?.filter(
+                      (ind) => ind.matched_segment_id === seg.id
+                    ) || [];
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex flex-col max-w-[85%] border-b border-white/5 pb-4 space-y-3 ${
+                          seg.speaker === "CITIZEN"
+                            ? "mr-auto"
+                            : "ml-auto text-right"
+                        }`}
+                      >
+                        <div className={`flex items-center gap-4 text-[9px] uppercase tracking-widest font-medium ${seg.speaker === "CITIZEN" ? "text-gray-500" : "text-accentGold flex-row-reverse"}`}>
+                          <span className="flex items-center gap-2">
+                            {seg.speaker}
+                            {seg.speaker === "SUSPECT" && (
+                              <span className="text-red-500">Unverified</span>
+                            )}
+                          </span>
+                          <span className="opacity-50">Seq: #{seg.sequence_number}</span>
+                        </div>
+                        
+                        <p className={`font-serif text-lg font-light leading-relaxed ${seg.speaker === "CITIZEN" ? "text-white/80" : "text-white"}`}>{seg.text}</p>
+
+                        {/* Display Anchored matched evidence indicator flags */}
+                        {matchingIndicators.map((ind, i) => (
+                          <div key={i} className="border-l border-red-500 pl-4 py-1 mt-2 text-[10px] font-light text-gray-400">
+                            <span className="font-medium text-red-500 uppercase tracking-widest block mb-1">
+                              Flagged Evidence: {ind.name}
+                            </span>
+                            <span className="block">{ind.explanation}</span>
+                          </div>
+                        ))}
+
+                        {seg.ingest_latency_ms !== undefined && (
+                          <span className={`text-[9px] text-gray-600 font-mono mt-2 block ${seg.speaker === "CITIZEN" ? "" : "text-left"}`}>
+                            Latency: Ingest {seg.ingest_latency_ms ? `${seg.ingest_latency_ms.toFixed(0)}ms` : "0ms"} | Proc {seg.processing_latency_ms ? `${seg.processing_latency_ms.toFixed(0)}ms` : "0ms"}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })
+                )}
+                <div ref={transcriptEndRef} />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Info Inspector (4 Columns) */}
+          <div className="lg:col-span-4 space-y-12 lg:border-l lg:border-white/5 lg:pl-12 pt-6 lg:pt-0">
+            
+            {/* Threat Monitor */}
+            <div className="space-y-8">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">
+                Scam Verdict Engine
+              </h2>
+
+              {verdict ? (
+                <div className="space-y-8">
+                  <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500">Verdict</span>
+                    <span
+                      className={`text-[10px] font-medium uppercase tracking-widest px-3 py-1 border ${
+                        verdict.verdict === "CRITICAL"
+                          ? "text-red-500 border-red-500/30"
+                          : verdict.verdict === "SUSPICIOUS"
+                          ? "text-accentGold border-accentGold/30"
+                          : "text-emerald-500 border-emerald-500/30"
+                      }`}
+                    >
+                      {verdict.verdict}
+                    </span>
                   </div>
 
-                  <div>
-                    <span className="text-[10px] text-gray-500 font-bold uppercase block">Indicators Flagged</span>
-                    <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      {verdict.triggered_indicators.length > 0 ? (
-                        verdict.triggered_indicators.map((code) => (
-                          <span
-                            key={code}
-                            className="rounded bg-slate-800 border border-borderBg px-2 py-0.5 text-xs text-accentTeal font-mono font-bold"
-                          >
-                            {code}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-xs text-gray-600">No markers matching</span>
-                      )}
+                  <div className="space-y-3 border-b border-white/5 pb-8">
+                    <div className="flex items-center justify-between text-[9px] uppercase tracking-widest font-medium text-gray-500">
+                      <span>Risk Rating Score</span>
+                      <span className="text-white">{(verdict.normalized_risk_score * 100).toFixed(0)}%</span>
+                    </div>
+                    <div className="w-full h-1 bg-white/5 overflow-hidden">
+                      <div
+                        className={`h-full transition-all duration-500 ${
+                          verdict.normalized_risk_score >= 0.8
+                            ? "bg-red-500"
+                            : verdict.normalized_risk_score >= 0.4
+                            ? "bg-accentGold"
+                            : "bg-emerald-500"
+                        }`}
+                        style={{ width: `${verdict.normalized_risk_score * 100}%` }}
+                      />
                     </div>
                   </div>
 
-                  {verdict.recommended_action && (
-                    <div className="rounded-lg bg-accentRed/5 border border-accentRed/20 p-3.5 flex gap-3 items-start">
-                      <ShieldAlert className="h-5 w-5 text-accentRed shrink-0 mt-0.5" />
-                      <div>
-                        <span className="text-[10px] font-bold text-accentRed uppercase tracking-wider block">
-                          Preventative Recommended Action
-                        </span>
-                        <p className="text-xs text-gray-300 mt-1">{verdict.recommended_action}</p>
+                  <div className="space-y-6">
+                    <div>
+                      <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500 block mb-2">Coercion Pattern</span>
+                      <span className="font-serif text-xl text-white font-light">{verdict.scam_type}</span>
+                    </div>
+
+                    <div>
+                      <span className="text-[9px] uppercase tracking-widest font-medium text-gray-500 block mb-3">Indicators Flagged</span>
+                      <div className="flex flex-wrap gap-3">
+                        {verdict.triggered_indicators.length > 0 ? (
+                          verdict.triggered_indicators.map((code) => (
+                            <span
+                              key={code}
+                              className="text-[10px] text-accentGold font-mono uppercase tracking-widest"
+                            >
+                              {code}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-[10px] font-light text-gray-600 uppercase tracking-widest">No markers matching</span>
+                        )}
                       </div>
                     </div>
+
+                    {verdict.recommended_action && (
+                      <div className="border-l border-red-500 pl-4 py-2 mt-8">
+                        <span className="text-[9px] font-medium text-red-500 uppercase tracking-widest block mb-2">
+                          Preventative Recommended Action
+                        </span>
+                        <p className="text-xs font-light text-gray-400 leading-relaxed">{verdict.recommended_action}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="h-44 flex flex-col items-center justify-center text-center p-6 text-gray-600">
+                  <AlertOctagon className="h-6 w-6 text-accentGold mb-4 opacity-50" strokeWidth={1.5} />
+                  <p className="text-[10px] uppercase tracking-widest font-light">Awaiting audio signals. Verdict will update dynamically.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Simulated Citizen device freeze */}
+            {sessionActive && (
+              <div className="border-t border-white/5 pt-8 space-y-6">
+                <div>
+                  <h3 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">Mobile Simulator</h3>
+                  <p className="text-xs text-gray-500 font-light leading-relaxed mt-2">
+                    Test defensive locking loops by attempting a mock UPI payment during coercion.
+                  </p>
+                </div>
+
+                {!intervention ? (
+                  <button
+                    onClick={handleAttemptTransfer}
+                    className="w-full border border-accentGold/50 hover:bg-accentGold hover:text-black py-3 text-[10px] font-medium uppercase tracking-widest text-accentGold transition-colors"
+                  >
+                    Simulate UPI Transfer (₹50,000)
+                  </button>
+                ) : (
+                  <div className="border border-emerald-500/30 p-4 space-y-2">
+                    <span className="text-[10px] font-medium text-emerald-500 uppercase tracking-widest block flex items-center gap-2">
+                      <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+                      Lock Triggered Successfully
+                    </span>
+                    <p className="text-xs font-light text-gray-400">{intervention}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Sliding Demo Operator Console Drawer */}
+        {showDrawer && (
+          <div className="fixed right-0 top-0 h-full w-96 bg-background/95 backdrop-blur-xl border-l border-white/10 shadow-2xl z-50 p-8 flex flex-col justify-between transition-transform duration-500 ease-out">
+            <div className="space-y-10">
+              <div className="flex items-center justify-between border-b border-white/10 pb-6">
+                <h2 className="text-[10px] font-medium text-white uppercase tracking-widest flex items-center gap-3">
+                  <Sliders className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                  Demo Operator Panel
+                </h2>
+                <button
+                  onClick={() => setShowDrawer(false)}
+                  className="text-[9px] text-gray-500 hover:text-white uppercase tracking-widest font-medium transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <label className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block">Script Scenario Library</label>
+                <select
+                  value={selectedScenario}
+                  onChange={(e) => {
+                    setSelectedScenario(e.target.value);
+                    setSimStep(1);
+                  }}
+                  className="w-full bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white"
+                >
+                  {SCENARIOS.map((sc) => (
+                    <option key={sc.id} value={sc.id}>
+                      {sc.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-6">
+                <label className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block font-mono">Control Triggers</label>
+                
+                <button
+                  onClick={handleInjectSafeSentence}
+                  className="w-full border border-white/10 hover:border-white/30 py-3 text-[10px] uppercase tracking-widest text-gray-300 hover:text-white transition-colors"
+                  title="Inject phrase that triggers de-escalation logic"
+                >
+                  Inject Counter-Evidence Sentence
+                </button>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    onClick={() => connectWebSocket(true)}
+                    className="flex items-center justify-center gap-2 border border-white/10 hover:border-accentGold py-3 text-[9px] text-accentGold uppercase tracking-widest transition-colors"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" strokeWidth={1.5} />
+                    Reconnect
+                  </button>
+                  <button
+                    onClick={disconnectWebSocket}
+                    className="flex items-center justify-center gap-2 border border-white/10 hover:border-red-500 py-3 text-[9px] text-red-500 uppercase tracking-widest transition-colors"
+                  >
+                    Disconnect
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block font-mono">Connection Logs</label>
+                <div className="h-48 border border-white/5 p-4 overflow-y-auto space-y-2 select-all font-mono text-[9px]">
+                  {connectionStatusLog.length === 0 ? (
+                    <span className="text-gray-700 italic">No logs recorded yet.</span>
+                  ) : (
+                    connectionStatusLog.map((log, idx) => (
+                      <div key={idx} className="text-gray-500">
+                        {log}
+                      </div>
+                    ))
                   )}
                 </div>
               </div>
-            ) : (
-              <div className="h-44 flex flex-col items-center justify-center text-center p-6 text-gray-600">
-                <AlertOctagon className="h-8 w-8 text-gray-700 mb-2 animate-pulse" />
-                <p className="text-xs">Awaiting audio signals. Verdict will update dynamically.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Simulated Citizen device freeze */}
-          {sessionActive && (
-            <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-4">
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">Mobile Simulator</h3>
-                <p className="text-xs text-gray-500 mt-1">
-                  Test defensive locking loops by attempting a mock UPI payment during coercion.
-                </p>
-              </div>
-
-              {!intervention ? (
-                <button
-                  onClick={handleAttemptTransfer}
-                  className="w-full flex items-center justify-center gap-2 rounded bg-accentAmber hover:bg-yellow-500 px-4 py-2 text-xs font-bold text-black transition"
-                >
-                  Simulate UPI Transfer (₹50,000)
-                </button>
-              ) : (
-                <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4 flex gap-3 items-start">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-xs font-bold text-emerald-500 uppercase tracking-wider block">
-                      Lock Triggered Successfully
-                    </span>
-                    <p className="text-xs text-gray-300 mt-1">{intervention}</p>
-                  </div>
-                </div>
-              )}
             </div>
-          )}
-        </div>
+
+            <div className="border-t border-white/10 pt-6 text-[9px] text-gray-600 flex items-center justify-between uppercase tracking-widest font-medium">
+              <span>Demo Mode State</span>
+              <span className="text-accentGold font-mono">Locked Active</span>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Sliding Demo Operator Console Drawer */}
-      {showDrawer && (
-        <div className="fixed right-0 top-0 h-full w-80 bg-slate-900 border-l border-borderBg shadow-2xl z-50 p-6 flex flex-col justify-between transition-all duration-300 animate-slide-in">
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-borderBg pb-3">
-              <h2 className="text-sm font-bold text-white uppercase flex items-center gap-1.5">
-                <Sliders className="h-4.5 w-4.5 text-accentTeal" />
-                Demo Operator Panel
-              </h2>
-              <button
-                onClick={() => setShowDrawer(false)}
-                className="text-xs text-gray-500 hover:text-white uppercase font-bold"
-              >
-                Close
-              </button>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase block">Script Scenario Library</label>
-              <select
-                value={selectedScenario}
-                onChange={(e) => {
-                  setSelectedScenario(e.target.value);
-                  setSimStep(1);
-                }}
-                className="w-full rounded bg-slate-800 border border-borderBg px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-accentTeal"
-              >
-                {SCENARIOS.map((sc) => (
-                  <option key={sc.id} value={sc.id}>
-                    {sc.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-3">
-              <label className="text-[10px] font-bold text-gray-400 uppercase block font-mono">Control Triggers</label>
-              
-              <button
-                onClick={handleInjectSafeSentence}
-                className="w-full flex items-center justify-center gap-1.5 rounded bg-slate-800 hover:bg-slate-700 py-2 text-xs text-white border border-borderBg font-semibold transition"
-                title="Inject phrase that triggers de-escalation logic"
-              >
-                Inject Counter-Evidence Sentence
-              </button>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => connectWebSocket(true)}
-                  className="flex items-center justify-center gap-1 rounded bg-slate-800 hover:bg-slate-700 py-1.5 text-xs text-accentTeal border border-borderBg font-semibold transition"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  Reconnect WS
-                </button>
-                <button
-                  onClick={disconnectWebSocket}
-                  className="flex items-center justify-center gap-1 rounded bg-slate-800 hover:bg-slate-700 py-1.5 text-xs text-accentRed border border-borderBg font-semibold transition"
-                >
-                  Disconnect WS
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase block font-mono">Connection Logs</label>
-              <div className="h-36 bg-background rounded border border-borderBg p-3 overflow-y-auto space-y-1.5 select-all">
-                {connectionStatusLog.length === 0 ? (
-                  <span className="text-[10px] text-gray-700 italic">No logs recorded yet.</span>
-                ) : (
-                  connectionStatusLog.map((log, idx) => (
-                    <div key={idx} className="text-[10px] font-mono text-gray-500 leading-normal">
-                      {log}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-borderBg/50 pt-4 text-[10px] text-gray-600 flex items-center justify-between uppercase font-bold tracking-wider">
-            <span>Demo Mode State</span>
-            <span className="text-accentTeal font-mono">Locked Active</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

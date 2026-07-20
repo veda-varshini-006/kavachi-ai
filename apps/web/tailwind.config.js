@@ -7,12 +7,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#030712", // Deep navy base
-        cardBg: "#0B1528",       // Lighter accent navy for cards
-        borderBg: "#1E293B",     // Sleek slate border
-        accentTeal: "#06B6D4",   // Intelligence cyan/teal
-        accentAmber: "#F59E0B",  // Warning amber
-        accentRed: "#EF4444",    // Critical error state
+        background: "#050505", // Extremely dark charcoal/almost black
+        cardBg: "#0A0A0A",     // Just barely lighter than background
+        borderBg: "#171717",   // Subtle line color
+        accentGold: "#b39b7d", // Izanami luxury gold/bronze
+        accentMuted: "#A3A3A3",// Quiet text accent
+        // Legacy colors for inner modules not yet updated
+        accentTeal: "#06B6D4",
+        accentAmber: "#F59E0B",
+        accentRed: "#EF4444",
+      },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'serif'],
+      },
+      transitionTimingFunction: {
+        'izanami': 'cubic-bezier(0.16, 1, 0.3, 1)', // Ultra-smooth ease out
       },
     },
   },

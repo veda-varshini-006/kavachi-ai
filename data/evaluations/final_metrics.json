@@ -1,0 +1,138 @@
+{
+  "timestamp": "2026-07-20T10:17:34.583725",
+  "environment": {
+    "db_url": "",
+    "version": "1.0.0"
+  },
+  "scam_detection": {
+    "precision": 0.8235294117647058,
+    "recall": 1.0,
+    "macro_f1": 0.9032258064516129,
+    "false_positive_rate": 0.5,
+    "confusion_matrix": {
+      "tp": 140,
+      "fp": 30,
+      "tn": 30,
+      "fn": 0
+    },
+    "language_breakdown": {
+      "Hinglish/Hindi": {
+        "correct": 25,
+        "total": 25
+      },
+      "English": {
+        "correct": 70,
+        "total": 100
+      },
+      "Telugu/English": {
+        "correct": 0,
+        "total": 15
+      },
+      "Tamil/English": {
+        "correct": 30,
+        "total": 30
+      },
+      "English/Hindi": {
+        "correct": 30,
+        "total": 30
+      }
+    },
+    "total_evaluated": 200
+  },
+  "counterfeit_screening": {
+    "provenance": "Kavach AI Synthetic Perturbation Set",
+    "license": "CC0-1.0 Universal",
+    "metrics_summary": {
+      "total_benchmark_cases": 10,
+      "accuracy": 0.8,
+      "macro_f1": 0.85,
+      "false_acceptance_rate": 0.0,
+      "false_rejection_rate": 0.1,
+      "abstention_manual_review_rate": 0.2
+    },
+    "performance_splits": {
+      "synthetic_perturbations_performance": {
+        "description": "Evaluation scores on programmatically perturbed watermarked currency images.",
+        "accuracy": 0.8
+      },
+      "real_world_production_performance": {
+        "description": "Notice: real-world currency performance is untested. Platform remains an analyst prototype simulation only.",
+        "accuracy": 0.0
+      }
+    }
+  },
+  "threshold_sweep_summary": [
+    {
+      "suspicious_threshold": 0.2,
+      "precision": 0.7777777777777778,
+      "recall": 1.0,
+      "f1_score": 0.8750000000000001,
+      "tp": 140,
+      "fp": 40,
+      "tn": 20,
+      "fn": 0
+    },
+    {
+      "suspicious_threshold": 0.3,
+      "precision": 0.8235294117647058,
+      "recall": 1.0,
+      "f1_score": 0.9032258064516129,
+      "tp": 140,
+      "fp": 30,
+      "tn": 30,
+      "fn": 0
+    },
+    {
+      "suspicious_threshold": 0.4,
+      "precision": 0.8235294117647058,
+      "recall": 1.0,
+      "f1_score": 0.9032258064516129,
+      "tp": 140,
+      "fp": 30,
+      "tn": 30,
+      "fn": 0
+    },
+    {
+      "suspicious_threshold": 0.5,
+      "precision": 0.8235294117647058,
+      "recall": 1.0,
+      "f1_score": 0.9032258064516129,
+      "tp": 140,
+      "fp": 30,
+      "tn": 30,
+      "fn": 0
+    },
+    {
+      "suspicious_threshold": 0.6,
+      "precision": 0.8235294117647058,
+      "recall": 1.0,
+      "f1_score": 0.9032258064516129,
+      "tp": 140,
+      "fp": 30,
+      "tn": 30,
+      "fn": 0
+    },
+    {
+      "suspicious_threshold": 0.7,
+      "precision": 1.0,
+      "recall": 0.6785714285714286,
+      "f1_score": 0.8085106382978724,
+      "tp": 95,
+      "fp": 0,
+      "tn": 60,
+      "fn": 45
+    },
+    {
+      "suspicious_threshold": 0.8,
+      "precision": 1.0,
+      "recall": 0.6785714285714286,
+      "f1_score": 0.8085106382978724,
+      "tp": 95,
+      "fp": 0,
+      "tn": 60,
+      "fn": 45
+    }
+  ],
+  "system_validation_tests_passed": true,
+  "test_output": "st_case_transitions PASSED [ 73%]\napps/api/tests/test_risk_engine.py::test_risk_stage_progression PASSED   [ 76%]\napps/api/tests/test_risk_engine.py::test_counter_evidence_de_escalation PASSED [ 78%]\napps/api/tests/test_risk_engine.py::test_prompt_injection_sanitizer PASSED [ 80%]\napps/api/tests/test_risk_engine.py::test_evaluation_benchmark_run PASSED [ 83%]\napps/api/tests/test_scenarios_e2e.py::test_digital_arrest_scenario_e2e PASSED [ 85%]\napps/api/tests/test_scenarios_e2e.py::test_campaign_scenario_e2e PASSED  [ 88%]\napps/api/tests/test_services.py::test_database_seeder PASSED             [ 90%]\napps/api/tests/test_stream_pipeline.py::test_websocket_heartbeat PASSED  [ 92%]\napps/api/tests/test_stream_pipeline.py::test_websocket_duplicate_suppression PASSED [ 95%]\napps/api/tests/test_stream_pipeline.py::test_websocket_reconnect_replay PASSED [ 97%]\napps/api/tests/test_stream_pipeline.py::test_websocket_telemetry PASSED  [100%]\n\n============================== warnings summary ===============================\n.venv\\Lib\\site-packages\\fastapi\\testclient.py:1\n  C:\\Users\\aniru\\Downloads\\kavachi-ai-main\\.venv\\Lib\\site-packages\\fastapi\\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 42 passed, 1 warning in 13.62s ========================\n"
+}

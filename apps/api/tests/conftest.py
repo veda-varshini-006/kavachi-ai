@@ -61,6 +61,7 @@ def client(db_session):
             pass
 
     app.dependency_overrides[get_db] = _get_db_override
-    with TestClient(app) as test_client:
+    # Provide a default role so tests don't fail with 403 Forbidden
+    with TestClient(app, headers={"X-Demo-Role": "Admin"}) as test_client:
         yield test_client
     app.dependency_overrides.clear()

@@ -5,16 +5,16 @@ import CytoscapeComponent from "react-cytoscapejs";
 import { AlertCircle, Filter, Maximize2, ShieldAlert } from "lucide-react";
 
 export default function GraphDashboard() {
-  const [elements, setElements] = useState([]);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [selectedEdge, setSelectedEdge] = useState(null);
-  const [clusters, setClusters] = useState([]);
+  const [elements, setElements] = useState<any[]>([]);
+  const [selectedNode, setSelectedNode] = useState<any>(null);
+  const [selectedEdge, setSelectedEdge] = useState<any>(null);
+  const [clusters, setClusters] = useState<any[]>([]);
 
   useEffect(() => {
     fetch("/api/v1/intelligence/graph")
       .then((res) => res.json())
       .then((data) => {
-        const cyNodes = data.nodes.map((n) => ({
+        const cyNodes = data.nodes.map((n: any) => ({
           data: {
             id: n.id,
             label: n.value,
@@ -22,7 +22,7 @@ export default function GraphDashboard() {
             risk_score: n.risk_score,
           },
         }));
-        const cyEdges = data.links.map((e) => ({
+        const cyEdges = data.links.map((e: any) => ({
           data: {
             id: e.id,
             source: e.source,
@@ -122,7 +122,7 @@ export default function GraphDashboard() {
     }
   ];
 
-  const handleReview = (edgeId, action) => {
+  const handleReview = (edgeId: string, action: string) => {
     fetch(`/api/v1/intelligence/graph/review-link/${edgeId}?action=${action}`, {
       method: 'POST'
     }).then(res => res.json()).then(data => {
@@ -134,7 +134,7 @@ export default function GraphDashboard() {
            }
            return el;
          }));
-         setSelectedEdge(prev => ({ ...prev, is_reviewed: data.is_reviewed, is_rejected: data.is_rejected }));
+         setSelectedEdge((prev: any) => ({ ...prev, is_reviewed: data.is_reviewed, is_rejected: data.is_rejected }));
       }
     })
   };
@@ -206,7 +206,7 @@ export default function GraphDashboard() {
                 <div className="text-xs text-slate-500">
                   Central nodes:
                   <ul className="list-disc pl-4 mt-1">
-                    {c.central_nodes.map((n) => (
+                    {c.central_nodes.map((n: any) => (
                       <li key={n.id}>{n.value}</li>
                     ))}
                   </ul>
@@ -224,16 +224,16 @@ export default function GraphDashboard() {
           style={{ width: "100%", height: "100%" }}
           layout={layout}
           stylesheet={stylesheet}
-          cy={(cy) => {
-            cy.on("tap", "node", (evt) => {
+          cy={(cy: any) => {
+            cy.on("tap", "node", (evt: any) => {
               setSelectedNode(evt.target.data());
               setSelectedEdge(null);
             });
-            cy.on("tap", "edge", (evt) => {
+            cy.on("tap", "edge", (evt: any) => {
               setSelectedEdge(evt.target.data());
               setSelectedNode(null);
             });
-            cy.on("tap", (evt) => {
+            cy.on("tap", (evt: any) => {
               if (evt.target === cy) {
                 setSelectedNode(null);
                 setSelectedEdge(null);

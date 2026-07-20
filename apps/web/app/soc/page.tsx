@@ -168,222 +168,231 @@ export default function SOCDashboard() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <ShieldAlert className="h-6 w-6 text-accentTeal animate-pulse" />
-            Security Operations Console
-          </h1>
-          <p className="text-sm text-gray-400">
-            Real-time pre-transaction security event feed, active intercepts, and automated risk verdicts.
-          </p>
-        </div>
-
-        {/* Audit Verification status box */}
-        <div className="rounded border border-borderBg bg-cardBg px-4 py-2 flex items-center gap-3">
-          <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Merkle audit chain:</span>
-          <span className={`text-xs font-mono font-bold ${
-            auditChainStatus === "VALID" ? "text-emerald-500" : auditChainStatus === "VERIFYING..." ? "text-accentTeal" : "text-accentRed"
-          }`}>
-            {auditChainStatus}
-          </span>
-          <button onClick={verifyAuditChain} className="text-gray-500 hover:text-white transition">
-            <RotateCcw className="h-3.5 w-3.5" />
-          </button>
-        </div>
+    <div className="relative min-h-screen pb-12">
+      {/* Background Image for SOC with Izanami Blend */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="/server-bg.jpg"
+          alt="Monochrome Server Room"
+          className="w-full h-full object-cover opacity-10 mix-blend-luminosity"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/95 to-background" />
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        {/* Left Column: Active Cases Severity Queue (5 cols) */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="rounded-xl border border-borderBg bg-cardBg p-5 flex flex-col h-[520px]">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
-              <PhoneCall className="h-4.5 w-4.5 text-accentTeal animate-bounce" />
-              Active Incident Severity Queue
-            </h2>
+      <div className="space-y-12 max-w-[1600px] mx-auto pt-4 relative z-10">
+        {/* Title */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-8">
+          <div>
+            <h1 className="font-serif text-4xl text-white font-medium mb-3 flex items-center gap-4">
+              <ShieldAlert className="h-6 w-6 text-accentGold" strokeWidth={1.5} />
+              Security Operations Console
+            </h1>
+            <p className="text-sm text-gray-500 font-light max-w-2xl leading-relaxed tracking-wide">
+              Real-time pre-transaction security event feed, active intercepts, and automated risk verdicts.
+            </p>
+          </div>
 
-            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-              {cases.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center p-6 text-gray-600">
-                  <CheckCircle className="h-8 w-8 text-emerald-500 mb-2" />
-                  <p className="text-xs">No active threats detected.</p>
-                </div>
-              ) : (
-                cases.map((c) => {
-                  const sla = slaTimers[c.id] || 0;
-                  const isSelected = selectedCase?.id === c.id;
-
-                  return (
-                    <div
-                      key={c.id}
-                      onClick={() => {
-                        setSelectedCase(c);
-                        setTransitionStatus(c.status);
-                      }}
-                      className={`rounded-lg border p-4 transition cursor-pointer flex justify-between items-start ${
-                        isSelected
-                          ? "bg-slate-800/80 border-accentTeal"
-                          : "bg-background/40 hover:bg-slate-800/40 border-borderBg"
-                      }`}
-                    >
-                      <div className="space-y-1.5 max-w-[70%]">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${
-                            c.severity === "CRITICAL"
-                              ? "bg-accentRed/10 text-accentRed border border-accentRed/30"
-                              : "bg-accentAmber/10 text-accentAmber border border-accentAmber/30"
-                          }`}>
-                            {c.severity}
-                          </span>
-                          <span className="text-[10px] text-gray-400 font-mono truncate">{c.status}</span>
-                        </div>
-                        <h3 className="text-xs font-bold text-white truncate">{c.title}</h3>
-                        <span className="text-[10px] text-gray-500 font-mono block">ID: {c.id.substring(0, 8)}...</span>
-                      </div>
-
-                      <div className="text-right space-y-1.5">
-                        {sla > 0 ? (
-                          <span className="flex items-center gap-1 text-[10px] font-bold text-accentAmber">
-                            <Clock className="h-3 w-3" />
-                            {formatSla(sla)}
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-gray-600">SLA Closed</span>
-                        )}
-                        <span className="text-[10px] text-gray-600 block">
-                          {formatDistanceToNow(new Date(c.created_at))} ago
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
+          {/* Audit Verification status box */}
+          <div className="flex items-center gap-3 shrink-0 pb-1">
+            <span className="text-[10px] text-gray-500 font-medium uppercase tracking-[0.2em]">Merkle chain:</span>
+            <span className={`text-[10px] font-mono uppercase tracking-widest ${
+              auditChainStatus === "VALID" ? "text-white" : auditChainStatus === "VERIFYING..." ? "text-accentGold" : "text-red-500"
+            }`}>
+              {auditChainStatus}
+            </span>
+            <button onClick={verifyAuditChain} className="text-gray-500 hover:text-accentGold transition-colors">
+              <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </button>
           </div>
         </div>
 
-        {/* Right Column: Queue Detail Operations Dashboard (7 cols) */}
-        <div className="lg:col-span-7 space-y-6">
-          {selectedCase ? (
-            <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-6">
-              
-              {/* Header Details */}
-              <div className="flex items-start justify-between border-b border-borderBg/50 pb-4">
-                <div>
-                  <h2 className="text-base font-bold text-white">{selectedCase.title}</h2>
-                  <p className="text-xs text-gray-400 mt-1 leading-relaxed">{selectedCase.description}</p>
-                </div>
-                <Link
-                  href={`/cases/${selectedCase.id}`}
-                  className="flex items-center gap-1 text-xs text-accentTeal hover:underline shrink-0"
-                >
-                  Audit File
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* Left Column: Active Cases Severity Queue (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="border-t border-white/5 pt-6 flex flex-col h-[520px]">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 mb-8 flex items-center gap-3">
+                <PhoneCall className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                Active Incident Severity Queue
+              </h2>
 
-              <div className="grid grid-cols-2 gap-4 text-xs">
-                <div className="bg-background/40 p-4.5 rounded-lg border border-borderBg/50 space-y-1">
-                  <span className="text-gray-500 block uppercase text-[10px] font-bold">Assigned Owner:</span>
-                  <span className="font-semibold text-white flex items-center gap-1.5">
-                    <User className="h-4 w-4 text-accentTeal" />
-                    {selectedCase.assigned_to || "No Agent Assigned"}
-                  </span>
-                </div>
-
-                <div className="bg-background/40 p-4.5 rounded-lg border border-borderBg/50 space-y-1">
-                  <span className="text-gray-500 block uppercase text-[10px] font-bold">Active Intercept Session:</span>
-                  <span className="font-mono text-white truncate block">
-                    {selectedCase.session_id || "None linked"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Legal Transitions form */}
-              <div className="border-t border-borderBg/50 pt-4 space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <UserCheck className="h-4.5 w-4.5 text-accentTeal" />
-                  Transition Operator Case Status
-                </h3>
-
-                <form onSubmit={handleTransitionStatus} className="flex gap-4">
-                  <div className="flex-1">
-                    <select
-                      value={transitionStatus}
-                      onChange={(e) => setTransitionStatus(e.target.value)}
-                      className="w-full rounded bg-slate-800 border border-borderBg px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-accentTeal"
-                    >
-                      {/* Enforce legal transitions in options list */}
-                      <option value={selectedCase.status}>{selectedCase.status} (Current)</option>
-                      {ALLOWED_TRANSITIONS[selectedCase.status]?.map((st) => (
-                        <option key={st} value={st}>
-                          Transition to: {st}
-                        </option>
-                      ))}
-                    </select>
+              <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+                {cases.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-6 text-gray-600">
+                    <CheckCircle className="h-6 w-6 text-accentGold mb-4" strokeWidth={1.5} />
+                    <p className="text-xs font-light tracking-wide uppercase">No active threats detected.</p>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={updatingStatus}
-                    className="bg-accentTeal hover:bg-cyan-500 text-black px-6 py-2 rounded text-xs font-bold transition disabled:opacity-50"
-                  >
-                    {updatingStatus ? "Transitioning..." : "Apply Transition"}
-                  </button>
-                </form>
-              </div>
+                ) : (
+                  cases.map((c) => {
+                    const sla = slaTimers[c.id] || 0;
+                    const isSelected = selectedCase?.id === c.id;
 
-              {/* Action Log Shortcuts */}
-              <div className="border-t border-borderBg/50 pt-4 flex gap-4">
-                <Link
-                  href={`/cases/${selectedCase.id}/evidence-package`}
-                  className="flex-1 flex items-center justify-center gap-1.5 rounded bg-slate-800 hover:bg-slate-700 py-2.5 text-xs text-white border border-borderBg font-semibold transition"
-                >
-                  <FileText className="h-3.5 w-3.5 text-accentTeal" />
-                  Export Evidence package
-                </Link>
+                    return (
+                      <div
+                        key={c.id}
+                        onClick={() => {
+                          setSelectedCase(c);
+                          setTransitionStatus(c.status);
+                        }}
+                        className={`group border-b border-white/5 pb-4 transition-colors cursor-pointer flex justify-between items-start ${
+                          isSelected ? "opacity-100" : "opacity-50 hover:opacity-100"
+                        }`}
+                      >
+                        <div className="space-y-3 max-w-[70%]">
+                          <div className="flex items-center gap-3 flex-wrap">
+                            <span className="text-[9px] font-medium uppercase tracking-widest text-accentGold">
+                              {c.severity}
+                            </span>
+                            <span className="text-[9px] text-gray-500 font-mono uppercase">{c.status}</span>
+                          </div>
+                          <h3 className="font-serif text-lg text-white font-light truncate">{c.title}</h3>
+                          <span className="text-[10px] text-gray-500 font-mono block">ID: {c.id.substring(0, 8)}</span>
+                        </div>
 
-                {selectedCase.session_id && (
-                  <Link
-                    href={`/call-simulator`}
-                    className="flex-1 flex items-center justify-center gap-1.5 rounded bg-slate-800 hover:bg-slate-700 py-2.5 text-xs text-white border border-borderBg font-semibold transition"
-                  >
-                    <Activity className="h-3.5 w-3.5 text-accentTeal" />
-                    Interact Call Simulator
-                  </Link>
+                        <div className="text-right space-y-3 pt-1">
+                          {sla > 0 ? (
+                            <span className="flex items-center justify-end gap-2 text-[10px] font-medium tracking-widest text-white">
+                              <Clock className="h-3 w-3 text-accentGold" strokeWidth={1.5} />
+                              {formatSla(sla)}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] uppercase tracking-widest text-gray-600">SLA Closed</span>
+                          )}
+                          <span className="text-[9px] uppercase tracking-widest text-gray-600 block">
+                            {formatDistanceToNow(new Date(c.created_at))} ago
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })
                 )}
               </div>
-
             </div>
-          ) : (
-            <div className="rounded-xl border border-borderBg bg-cardBg p-12 text-center text-gray-500 h-[300px] flex flex-col items-center justify-center">
-              <AlertTriangle className="h-10 w-10 text-gray-700 mb-2" />
-              <p className="text-sm">Select an active incident queue ticket from the list.</p>
-            </div>
-          )}
+          </div>
 
-          {/* Append Only Log Feed */}
-          <div className="rounded-xl border border-borderBg bg-cardBg p-6 space-y-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-gray-400">
-              Chain Event Audit Logs
-            </h2>
-            <div className="space-y-3">
-              {auditEvents.length === 0 ? (
-                <p className="text-xs text-gray-600">No events logged in database.</p>
-              ) : (
-                auditEvents.map((evt) => (
-                  <div key={evt.id} className="flex justify-between items-center bg-background/30 border border-borderBg p-3 rounded-lg text-[11px] font-mono">
-                    <div className="space-y-1">
-                      <span className="text-accentTeal font-bold">{evt.action}</span>
-                      <p className="text-gray-500">Actor ID: {evt.actor_id} | Status: {evt.status}</p>
-                    </div>
-                    <span className="text-gray-600">
-                      {formatDistanceToNow(new Date(evt.timestamp))} ago
+          {/* Right Column: Queue Detail Operations Dashboard (7 cols) */}
+          <div className="lg:col-span-7 space-y-12 lg:border-l lg:border-white/5 lg:pl-12 pt-6 lg:pt-0">
+            {selectedCase ? (
+              <div className="space-y-10">
+                
+                {/* Header Details */}
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h2 className="font-serif text-3xl text-white font-light">{selectedCase.title}</h2>
+                    <p className="text-sm text-gray-500 font-light mt-4 leading-relaxed max-w-xl">{selectedCase.description}</p>
+                  </div>
+                  <Link
+                    href={`/cases/${selectedCase.id}`}
+                    className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-gray-400 hover:text-accentGold shrink-0 transition-colors"
+                  >
+                    Audit File
+                    <ArrowRight className="h-3 w-3" strokeWidth={1.5} />
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-2 gap-8 border-y border-white/5 py-8">
+                  <div className="space-y-3">
+                    <span className="text-gray-600 block uppercase text-[9px] tracking-widest font-medium">Assigned Owner</span>
+                    <span className="font-light text-white flex items-center gap-3 text-sm">
+                      <User className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                      {selectedCase.assigned_to || "No Agent Assigned"}
                     </span>
                   </div>
-                ))
-              )}
+
+                  <div className="space-y-3">
+                    <span className="text-gray-600 block uppercase text-[9px] tracking-widest font-medium">Active Intercept Session</span>
+                    <span className="font-mono text-white/80 text-sm truncate block">
+                      {selectedCase.session_id || "None linked"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Legal Transitions form */}
+                <div className="space-y-6">
+                  <h3 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500 flex items-center gap-3">
+                    <UserCheck className="h-4 w-4 text-accentGold" strokeWidth={1.5} />
+                    Transition Operator Case Status
+                  </h3>
+
+                  <form onSubmit={handleTransitionStatus} className="flex gap-6 max-w-xl">
+                    <div className="flex-1">
+                      <select
+                        value={transitionStatus}
+                        onChange={(e) => setTransitionStatus(e.target.value)}
+                        className="w-full bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white"
+                      >
+                        <option value={selectedCase.status}>{selectedCase.status} (Current)</option>
+                        {ALLOWED_TRANSITIONS[selectedCase.status]?.map((st) => (
+                          <option key={st} value={st}>
+                            Transition to: {st}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={updatingStatus}
+                      className="text-[10px] uppercase tracking-widest text-accentGold hover:text-white transition-colors disabled:opacity-50 pb-2 border-b border-transparent hover:border-white"
+                    >
+                      {updatingStatus ? "Transitioning..." : "Apply"}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Action Log Shortcuts */}
+                <div className="pt-8 flex flex-col gap-6">
+                  <h3 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">Quick Actions</h3>
+                  <div className="flex gap-8 flex-wrap">
+                    <Link href={`/cases/${selectedCase.id}/evidence-package`} className="group/link flex items-center gap-4 text-gray-400 text-xs font-light hover:text-white transition-colors">
+                      <FileText className="h-3.5 w-3.5 text-accentGold" strokeWidth={1.5} />
+                      Export Evidence
+                    </Link>
+                    <Link href="/graph" className="group/link flex items-center gap-4 text-gray-400 text-xs font-light hover:text-white transition-colors">
+                      <UserCheck className="h-3.5 w-3.5 text-accentGold" strokeWidth={1.5} />
+                      View Fraud Ring
+                    </Link>
+                    <Link href="/map" className="group/link flex items-center gap-4 text-gray-400 text-xs font-light hover:text-white transition-colors">
+                      <Activity className="h-3.5 w-3.5 text-accentGold" strokeWidth={1.5} />
+                      View Hotspots
+                    </Link>
+                    {selectedCase.session_id && (
+                      <Link href={`/call-simulator`} className="group/link flex items-center gap-4 text-gray-400 text-xs font-light hover:text-white transition-colors">
+                        <PhoneCall className="h-3.5 w-3.5 text-accentGold" strokeWidth={1.5} />
+                        Call Simulator
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center text-center text-gray-500 h-[300px]">
+                <AlertTriangle className="h-6 w-6 text-accentGold mb-6" strokeWidth={1.5} />
+                <p className="text-[10px] uppercase tracking-widest font-light">Select an incident from the queue.</p>
+              </div>
+            )}
+
+            {/* Append Only Log Feed */}
+            <div className="pt-12 border-t border-white/5 space-y-8">
+              <h2 className="text-[10px] font-medium uppercase tracking-[0.2em] text-gray-500">
+                Chain Event Audit Logs
+              </h2>
+              <div className="space-y-4">
+                {auditEvents.length === 0 ? (
+                  <p className="text-xs font-light text-gray-600">No events logged.</p>
+                ) : (
+                  auditEvents.map((evt) => (
+                    <div key={evt.id} className="flex justify-between items-start border-b border-white/5 pb-4">
+                      <div className="space-y-2">
+                        <span className="text-accentGold font-mono text-[10px] uppercase">{evt.action}</span>
+                        <p className="text-gray-500 text-[10px] font-light">Actor ID: <span className="font-mono text-white/50">{evt.actor_id}</span> | Status: {evt.status}</p>
+                      </div>
+                      <span className="text-[9px] uppercase tracking-widest text-gray-600">
+                        {formatDistanceToNow(new Date(evt.timestamp))} ago
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -1,35 +1,37 @@
-# Kavachi AI - Advanced Cyber Defense Dashboard
+# Kavach AI - Digital Public Safety Intelligence Hub
 
-Kavachi AI is an advanced prototype for cyber defense, forensic case management, and data compliance visualization. Built iteratively, this project demonstrates a highly robust web dashboard and API backend tailored for forensic and intelligence-level cyber security.
+![Kavach AI Architecture](docs/SYSTEM_DESIGN.md)
 
-## Current Project Status
-- **Implementation Status:** 9 Prompts Completed out of 10
-- **Overall Completion:** ~97% Complete
-- **Latest Phase Completed:** Production Hardening (Prompt 9)
+**Kavach AI** is a prototype Digital Public Safety Intelligence Hub designed to detect scam coercion in real-time, screen suspect currency, link fraud networks, and coordinate geospatial response. 
 
-## Key Features Built
-1. **Full-stack API & Web Dashboard**: Developed a FastAPI backend and a NextJS frontend connected via REST and WebSockets.
-2. **Data-Subject Request (DSR) & Privacy Compliance**: Deeply integrated privacy auditing, granular redaction rules (PII masking), and data-export capabilities compliant with security standards.
-3. **Counterfeit Detection & Intelligence Fusion**: Features a robust `Counterfeit Screening Core` and `ScenarioReplayService` capable of categorizing anomalous incidents and linking them in a relational knowledge graph.
-4. **Comprehensive Telemetry (Observability)**: Packed with pre-flight check tools, Grafana dashboards, and Prometheus data scraping integrations out-of-the-box.
-5. **CI/CD Integration**: Secure GitHub actions for Python typing (`mypy`), linting (`ruff`), NextJS accessibility audits (`eslint-plugin-jsx-a11y`), and automated SBOM (Software Bill of Materials) generation via Syft.
-6. **Load & Resilience Testing**: Fault injection routes and synthetic load tests built directly into the codebase.
+> [!WARNING]
+> **Simulated Prototype Boundary**: This application is a decision-support prototype. It does not connect to real telecom providers, banking networks, or police dispatch systems. All "actions" are simulated.
+
+## Features
+- **Real-Time Call Coercion Engine**: Processes call transcripts to detect "Digital Arrest" and KYC fraud using a rolling state machine.
+- **Geospatial Hotspot Map**: K-anonymity privacy-preserving visualizations of scam incidents.
+- **Counterfeit Note Scanner**: Deterministic classical vision pipeline to screen uploaded currency.
+- **Fraud Linkage Graph**: Cybercrime network visualizations using Cytoscape.js.
+- **Merkle-Chain Auditing**: Tamper-evident transaction logs for SOC investigations.
 
 ## Quick Start
-The project relies on Docker Compose for a seamless startup of the entire stack.
-
 ```bash
-# 1. Bring up the stack (API, Web UI, Postgres Database, Prometheus, and Grafana)
-docker compose up --build
+# 1. Install dependencies
+make setup
 
-# 2. Run the database seeder to populate synthetic events
-curl -X POST "http://localhost:8000/api/v1/dev/seed" -H "X-Demo-Role: Admin"
+# 2. Start the application
+make dev
 ```
+Navigate to `http://localhost:3000` to view the dashboard.
 
-## Dashboard Services
-- **Web UI:** `http://localhost:3000`
-- **FastAPI Docs:** `http://localhost:8000/docs`
-- **Grafana Telemetry:** `http://localhost:3001` (Credentials: admin / admin)
+## Demo Credentials & Scenario Instructions
+- Role assignment is handled via `X-Demo-Role` headers (simulated).
+- To launch the pre-configured golden demo, navigate to `http://localhost:3000/demo-control`. 
+- Use the **Call Simulator** to inject the `DIGITAL_ARREST` test sequence.
 
-## License
-Proprietary Prototype.
+## Documentation
+- [System Design](docs/SYSTEM_DESIGN.md)
+- [Evaluation Protocol](docs/EVALUATION_PROTOCOL.md)
+- [Privacy & Data](docs/PRIVACY.md)
+- [Ethics & Limitations](docs/ETHICS_AND_LIMITATIONS.md)
+- [Security](docs/SECURITY.md)
