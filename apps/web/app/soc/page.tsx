@@ -229,9 +229,18 @@ export default function SOCDashboard() {
                     return (
                       <div
                         key={c.id}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => {
                           setSelectedCase(c);
                           setTransitionStatus(c.status);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setSelectedCase(c);
+                            setTransitionStatus(c.status);
+                          }
                         }}
                         className={`group border-b border-white/5 pb-4 transition-colors cursor-pointer flex justify-between items-start ${
                           isSelected ? "opacity-100" : "opacity-50 hover:opacity-100"

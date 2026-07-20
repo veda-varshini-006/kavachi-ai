@@ -382,8 +382,9 @@ export default function CounterfeitScreening() {
                   ) : (
                     cases.length > 0 && (
                       <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                        <label className="text-[10px] uppercase tracking-widest text-gray-400 shrink-0">Associate with Case Queue:</label>
+                        <label htmlFor="caseQueue" className="text-[10px] uppercase tracking-widest text-gray-400 shrink-0">Associate with Case Queue:</label>
                         <select
+                          id="caseQueue"
                           value={selectedCaseId}
                           onChange={(e) => setSelectedCaseId(e.target.value)}
                           className="flex-1 w-full bg-transparent border-b border-white/20 pb-2 text-[11px] uppercase tracking-widest text-white focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white"

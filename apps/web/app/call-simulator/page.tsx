@@ -667,8 +667,9 @@ export default function CallSimulator() {
               </div>
 
               <div className="space-y-4">
-                <label className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block">Script Scenario Library</label>
+                <label htmlFor="scenarioSelect" className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block">Script Scenario Library</label>
                 <select
+                  id="scenarioSelect"
                   value={selectedScenario}
                   onChange={(e) => {
                     setSelectedScenario(e.target.value);
@@ -685,7 +686,7 @@ export default function CallSimulator() {
               </div>
 
               <div className="space-y-6">
-                <label className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block font-mono">Control Triggers</label>
+                <span className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block font-mono">Control Triggers</span>
                 
                 <button
                   onClick={handleInjectSafeSentence}
@@ -713,7 +714,7 @@ export default function CallSimulator() {
               </div>
 
               <div className="space-y-4">
-                <label className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block font-mono">Connection Logs</label>
+                <span className="text-[9px] font-medium text-gray-500 uppercase tracking-widest block font-mono">Connection Logs</span>
                 <div className="h-48 border border-white/5 p-4 overflow-y-auto space-y-2 select-all font-mono text-[9px]">
                   {connectionStatusLog.length === 0 ? (
                     <span className="text-gray-700 italic">No logs recorded yet.</span>

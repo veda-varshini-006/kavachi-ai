@@ -72,8 +72,9 @@ export default function CasesIndex() {
         <div className="border-b border-white/5 pb-8 flex flex-wrap gap-8 items-center justify-between">
           <div className="flex gap-8">
             <div className="space-y-3">
-              <label className="text-[9px] uppercase tracking-[0.2em] font-medium text-gray-500 block">Severity Filter</label>
+              <label htmlFor="severityFilter" className="text-[9px] uppercase tracking-[0.2em] font-medium text-gray-500 block">Severity Filter</label>
               <select
+                id="severityFilter"
                 value={filterSeverity}
                 onChange={(e) => setFilterSeverity(e.target.value)}
                 className="bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white min-w-[160px]"
@@ -87,8 +88,9 @@ export default function CasesIndex() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-[9px] uppercase tracking-[0.2em] font-medium text-gray-500 block">Status Filter</label>
+              <label htmlFor="statusFilter" className="text-[9px] uppercase tracking-[0.2em] font-medium text-gray-500 block">Status Filter</label>
               <select
+                id="statusFilter"
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
                 className="bg-transparent border-b border-white/20 pb-2 text-sm text-white font-light focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white min-w-[160px]"

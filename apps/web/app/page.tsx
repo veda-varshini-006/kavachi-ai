@@ -83,8 +83,8 @@ function CinematicSection({
           </motion.div>
         </div>
         
-        <div className="overflow-hidden mb-12">
-          <motion.h2 variants={revealItem} className="font-serif text-6xl md:text-[8rem] font-medium text-white leading-[0.9] tracking-tighter drop-shadow-2xl">
+        <div className="overflow-hidden mb-12 py-4">
+          <motion.h2 variants={revealItem} className="font-serif text-6xl md:text-[8rem] font-medium text-white leading-none tracking-tighter drop-shadow-2xl">
             {title}
           </motion.h2>
         </div>
@@ -163,18 +163,18 @@ export default function LandingPage() {
 
         {/* Huge Typography */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center">
-          <div className="overflow-hidden w-full px-4 flex justify-center">
+          <div className="overflow-hidden w-full px-4 py-8 flex justify-center">
             <motion.h1 
               initial={{ y: "100%" }} 
               animate={{ y: 0 }} 
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }} 
-              className="font-serif text-[15vw] md:text-[12vw] lg:text-[10vw] leading-[0.8] text-white tracking-tighter flex flex-col items-center"
+              className="font-serif text-[15vw] md:text-[12vw] lg:text-[10vw] leading-none text-white tracking-tighter flex flex-col items-center"
             >
               <span>SILENT</span>
-              <span className="italic text-accentGold block mt-4">OVERSIGHT.</span>
+              <span className="italic text-accentGold block mt-4 pr-4">OVERSIGHT.</span>
             </motion.h1>
           </div>
-          <div className="overflow-hidden">
+          <div className="overflow-hidden py-2">
             <motion.p
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -297,9 +297,9 @@ export default function LandingPage() {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="relative z-10 text-center flex flex-col items-center gap-16"
         >
-          <div className="overflow-hidden">
-            <h2 className="font-serif text-[10vw] leading-[0.9] text-white tracking-tighter drop-shadow-2xl">
-              COMMAND <br /> <span className="italic text-accentGold">CONTROL.</span>
+          <div className="overflow-hidden py-4">
+            <h2 className="font-serif text-[10vw] leading-none text-white tracking-tighter drop-shadow-2xl">
+              COMMAND <br /> <span className="italic text-accentGold pr-4">CONTROL.</span>
             </h2>
           </div>
           

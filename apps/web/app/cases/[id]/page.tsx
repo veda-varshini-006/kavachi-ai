@@ -278,8 +278,9 @@ export default function CaseDetails({ params }: CaseDetailsProps) {
 
               <form onSubmit={handleSubmitFeedback} className="space-y-6">
                 <div>
-                  <label className="text-[9px] font-medium uppercase tracking-widest text-gray-500 block mb-3">Resolution Verdict</label>
+                  <label htmlFor="verdictSelect" className="text-[9px] font-medium uppercase tracking-widest text-gray-500 block mb-3">Resolution Verdict</label>
                   <select
+                    id="verdictSelect"
                     value={analystVerdict}
                     onChange={(e) => setAnalystVerdict(e.target.value)}
                     className="w-full bg-transparent border-b border-white/20 pb-2 text-[11px] uppercase tracking-widest text-white focus:outline-none focus:border-accentGold transition-colors [&>option]:bg-background [&>option]:text-white"
@@ -291,8 +292,9 @@ export default function CaseDetails({ params }: CaseDetailsProps) {
                 </div>
 
                 <div>
-                  <label className="text-[9px] font-medium uppercase tracking-widest text-gray-500 block mb-3">Audit Trail Notes</label>
+                  <label htmlFor="auditNotes" className="text-[9px] font-medium uppercase tracking-widest text-gray-500 block mb-3">Audit Trail Notes</label>
                   <textarea
+                    id="auditNotes"
                     placeholder="Provide detailed justification for the verification audit..."
                     value={feedbackNotes}
                     onChange={(e) => setFeedbackNotes(e.target.value)}
