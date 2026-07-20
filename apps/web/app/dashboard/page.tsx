@@ -51,9 +51,9 @@ export default function OverviewPage() {
 
       setStats({
         activeSessions: sessData.total || 0,
-        blockedAccounts: graphData.links?.filter((l: any) => l.type === "TRANSACTED_WITH").length || 0,
+        blockedAccounts: Array.isArray(graphData.links) ? graphData.links.filter((l: any) => l.type === "TRANSACTED_WITH").length : 0,
         activeCases: caseData.total || 0,
-        currencyScans: mapData?.filter((m: any) => m.event_type === "NOTE_SCAN").length || 0
+        currencyScans: Array.isArray(mapData) ? mapData.filter((m: any) => m.event_type === "NOTE_SCAN").length : 0
       });
     } catch (e) {
       console.error("Failed to load dashboard statistics:", e);
@@ -120,7 +120,7 @@ export default function OverviewPage() {
           {/* Large Card 1: Live Intercepts */}
           <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 lg:col-span-2 relative group overflow-hidden border border-white/5 bg-black/40 backdrop-blur-md p-8 min-h-[280px] flex flex-col justify-between hover:border-accentGold/40 transition-colors duration-700">
             <div className="absolute inset-0 z-0">
-              <Image src="/call-bg.jpg" alt="Intercepts" fill className="object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" />
+              <Image src="/call-bg.jpg" alt="Intercepts" fill sizes="100vw" className="object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
             </div>
             <div className="relative z-10 flex items-center justify-between">
@@ -144,7 +144,7 @@ export default function OverviewPage() {
           <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 lg:col-span-2 relative group overflow-hidden border border-white/5 bg-black/40 backdrop-blur-md p-8 min-h-[280px] flex flex-col justify-between hover:border-accentGold/40 transition-colors duration-700">
             <div className="absolute top-6 right-6 px-2 py-1 border border-accentGold/30 text-accentGold text-[9px] uppercase tracking-widest bg-accentGold/10 backdrop-blur-md z-10">Simulated</div>
             <div className="absolute inset-0 z-0">
-              <Image src="/counterfeit-bg.jpg" alt="Loss Prevention" fill className="object-cover opacity-15 group-hover:opacity-30 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" />
+              <Image src="/counterfeit-bg.jpg" alt="Loss Prevention" fill sizes="100vw" className="object-cover opacity-15 group-hover:opacity-30 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
             </div>
             <div className="relative z-10 flex items-center gap-3">
@@ -190,7 +190,7 @@ export default function OverviewPage() {
           {/* Wide Card: Spatial Intelligence */}
           <motion.div variants={itemVariants} className="col-span-1 md:col-span-2 lg:col-span-2 relative group overflow-hidden border border-white/5 bg-black/40 backdrop-blur-md p-8 min-h-[250px] flex flex-col justify-between hover:border-accentGold/40 transition-colors duration-700">
              <div className="absolute inset-0 z-0">
-              <Image src="/city-bg.jpg" alt="Spatial Intelligence" fill className="object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" />
+              <Image src="/city-bg.jpg" alt="Spatial Intelligence" fill sizes="100vw" className="object-cover opacity-20 group-hover:opacity-40 group-hover:scale-105 transition-all duration-1000 mix-blend-screen" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-transparent" />
             </div>
             <div className="relative z-10">

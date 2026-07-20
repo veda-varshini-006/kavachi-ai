@@ -25,6 +25,8 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-tooltip": "^1.2.7",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
     "clsx": "^2.1.1",
     "cytoscape": "^3.34.0",
     "date-fns": "^3.6.0",
@@ -38,13 +40,15 @@
     "react-dom": "^19.0.0",
     "react-map-gl": "^8.1.1",
     "recharts": "^2.15.0",
-    "tailwind-merge": "^2.6.1"
+    "tailwind-merge": "^2.6.1",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-cytoscapejs": "^1.2.6",
     "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.185.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.28.0",
     "eslint-config-next": "15.3.4",

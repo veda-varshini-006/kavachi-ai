@@ -101,7 +101,7 @@ export default function SOCDashboard() {
   const verifyAuditChain = async () => {
     setAuditChainStatus("VERIFYING...");
     try {
-      const res = await fetch("/api/v1/dev/seed"); // Trigger seed verify check or mock verify
+      const res = await fetch("/api/v1/dev/seed", { method: "POST" }); // Trigger seed verify check or mock verify
       // For high-fidelity, we retrieve validation state
       setAuditChainStatus("VALID");
     } catch {

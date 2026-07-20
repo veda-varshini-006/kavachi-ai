@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { Hero3D } from "@/components/ui/hero-3d";
 
 const revealContainer = {
   hidden: { opacity: 0 },
@@ -56,7 +57,7 @@ function CinematicSection({
     <div ref={containerRef} className="relative min-h-screen w-full overflow-hidden flex flex-col justify-center py-32 border-b border-white/5">
       {/* Parallax Background */}
       <motion.div style={{ scale, y }} className="absolute inset-0 z-0 origin-center">
-        <Image src={imageSrc} alt={title} fill className="object-cover mix-blend-luminosity opacity-80" />
+        <Image src={imageSrc} alt={title} fill sizes="100vw" className="object-cover mix-blend-luminosity opacity-80" />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80" />
       </motion.div>
@@ -142,10 +143,7 @@ export default function LandingPage() {
       
       {/* Initial Hero - Massive Lamalama Style */}
       <section className="relative h-screen w-full flex flex-col justify-between p-6 md:p-12 overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 z-0">
-          <Image src="/network-bg.jpg" alt="Network" fill className="object-cover opacity-90 mix-blend-screen" priority />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/80" />
-        </div>
+        <Hero3D />
 
         {/* Header */}
         <nav className="relative z-10 flex items-center justify-between w-full max-w-[1800px] mx-auto">
