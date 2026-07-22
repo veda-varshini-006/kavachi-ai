@@ -26,7 +26,7 @@ export default function DemoControl() {
     setLoading(false);
   };
 
-  const syncAuditLogs = async () => {
+  const reconcileDeadLetters = async () => {
     try {
       const res = await fetch(`http://localhost:8001/api/v1/ops/reconcile`, { method: 'POST' });
       const data = await res.json();

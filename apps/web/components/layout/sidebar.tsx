@@ -30,7 +30,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="flex h-full w-64 flex-col border-r border-borderBg bg-cardBg text-gray-200">
+    <div className="flex h-full w-64 flex-col border-r border-borderBg bg-cardBg/95 backdrop-blur-xl text-gray-100 shadow-xl z-50">
       {/* Brand Header */}
       <div className="flex h-16 items-center gap-2 border-b border-borderBg px-6">
         <ShieldCheck className="h-8 w-8 text-accentGold animate-pulse" />
@@ -52,16 +52,16 @@ export default function Sidebar() {
               key={item.name}
               href={item.href}
               className={clsx(
-                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-all duration-200 drop-shadow-md",
                 isActive
-                  ? "bg-accentGold/10 text-accentGold border-l-4 border-accentGold"
-                  : "text-gray-200 hover:bg-accentGold/5 hover:text-white"
+                  ? "bg-accentGold/10 text-accentGold border-l-4 border-accentGold drop-shadow-glow"
+                  : "text-white/90 hover:bg-accentGold/10 hover:text-white"
               )}
             >
               <Icon
                 className={clsx(
-                  "h-5 w-5 shrink-0 transition-colors duration-200",
-                  isActive ? "text-accentGold" : "text-gray-400 group-hover:text-accentGold"
+                  "h-5 w-5 shrink-0 transition-colors duration-200 drop-shadow-sm",
+                  isActive ? "text-accentGold" : "text-white/80 group-hover:text-accentGold"
                 )}
               />
               {item.name}

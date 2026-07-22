@@ -172,7 +172,7 @@ export default function SOCDashboard() {
       {/* Background Image for SOC with Izanami Blend */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
-          src="/server-bg.jpg"
+          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80"
           alt="Monochrome Server Room"
           className="w-full h-full object-cover opacity-10 mix-blend-luminosity"
         />
